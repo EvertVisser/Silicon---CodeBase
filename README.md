@@ -6,7 +6,7 @@ Silicon game files:
 + Tone.java, Envelope.java and Twain.java (threaded sound player support); and
 + resources.zip (3 sub-folders with resources: /data, /images and /sounds).
 
-These files are the result of the extensive recent pruning and harmonisation of the team's codebase.
+These files are the result of the extensive recent pruning and harmonisation of the team's codebase.  You can now play through an entire game on the generic background, and I am working, with my coding colleagues of course, to improve the user experience ...
 
 To compile:
 1. Put all the .java files in the /src folder.
