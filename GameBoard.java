@@ -4,11 +4,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -16,6 +14,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -23,7 +22,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 //GRP-COSC2635 2D
 //
@@ -45,12 +43,11 @@ public class GameBoard {
     private SiliconGame game;
     private Monitor monitor;
     private Settings settingsScreen;
-    private Scene scene;
     private Pane cardPane;
     private Group cardGuideGroup;
     private Group group;
     private Group outlineGroup;
-    private Stage primaryStage;
+    private BorderPane root;
     private GameControl gameControl;
     private Card[] deck;
     private ImageView[] cardViews;
@@ -103,14 +100,14 @@ public class GameBoard {
     private final KeyCombination shiftF = new KeyCodeCombination(KeyCode.F, KeyCombination.SHIFT_DOWN);
     private final KeyCombination shiftM = new KeyCodeCombination(KeyCode.M, KeyCombination.SHIFT_DOWN);
 
-    public GameBoard(SiliconGame game, Stage stage, GameControl gC, boolean gameLoaded) {
+    public GameBoard(SiliconGame game, BorderPane root, GameControl gC, boolean gameLoaded) {
 	// Import references to the main stage and GameControl object
 	this.game = game;
 	monitor = new Monitor();
 	settingsScreen = game.getSettings();
 	settingsScreen.setGameBoard(this);
-	stage.setFullScreenExitHint("");
-	primaryStage = stage;
+//	stage.setFullScreenExitHint("");
+	this.root = root;
 	gameControl = gC;
 	this.gameLoaded = gameLoaded;
 	gameControl.setGameBoard(this);
@@ -119,7 +116,7 @@ public class GameBoard {
 	mainDeckXCoord = gameControl.getGameRules().getMainDeckX();
 	mainDeckYCoord = gameControl.getGameRules().getMainDeckY();
 
-	primaryStage.setScene(sceneSetup());
+	root.setCenter(setupBoard(root));
 	if (settingsScreen.getFullScreen()) {
 	    settingsScreen.setFullScreen(false);
 	    settingsScreen.changeScreen();
@@ -135,14 +132,14 @@ public class GameBoard {
 	gameControl.firstRound();
     }
 
-    public GameBoard(SiliconGame game, Stage stage, GameControl gC, LoadGame loadGame) {
+    public GameBoard(SiliconGame game, BorderPane root, GameControl gC, LoadGame loadGame) {
 	// Import references to the main stage and GameControl object
 	this.game = game;
 	monitor = new Monitor();
-	stage.setFullScreenExitHint("");
+//	stage.setFullScreenExitHint("");
 	settingsScreen = game.getSettings();
 	settingsScreen.setGameBoard(this);
-	primaryStage = stage;
+	this.root = root;
 	gameControl = gC;
 	gameLoaded = true;
 	gameControl.setGameBoard(this);
@@ -152,7 +149,7 @@ public class GameBoard {
 	deck = gameControl.getGameState().getDeck();
 	mainDeckXCoord = gameControl.getGameRules().getMainDeckX();
 	mainDeckYCoord = gameControl.getGameRules().getMainDeckY();
-	primaryStage.setScene(sceneSetup());
+	root.setTop(setupBoard(root));
 	if (settingsScreen.getFullScreen()) {
 	    settingsScreen.setFullScreen(false);
 	    settingsScreen.changeScreen();
@@ -172,25 +169,11 @@ public class GameBoard {
 	gameControl.resumeGame();
     }
 
-    Scene sceneSetup() {
+    private StackPane setupBoard(BorderPane root) {
 
 	StackPane pane = new StackPane();
 
-	try {
-	    Image image1 = new Image("background_for_BIT.jpeg");
-	    ImageView view1 = new ImageView(image1);
-	    view1.setFitWidth(Monitor.fullWidth);
-	    view1.setFitHeight(Monitor.fullHeight);
-	    pane.getChildren().add(view1);
-
-	    Image image2 = new Image("iconic-photographs-1940-first-computer.jpg");
-	    ImageView view2 = new ImageView(image2);
-	    view2.setFitWidth(Monitor.defaultWidth);
-	    view2.setFitHeight(Monitor.defaultHeight);
-	    pane.getChildren().add(view2);
-	} catch (Exception ex) {
-	    System.out.println("GameBoard Class (lines 180-190): Unable to load background images - check folder.");
-	}
+	pane.setBackground(new Background(monitor.getBackground(1)));
 
 	HBox hBox = new HBox(0);
 	hBox.setAlignment(Pos.CENTER);
@@ -332,36 +315,14 @@ public class GameBoard {
 	});
 	rightPanel.getChildren().add(saveButton);
 
-	// A button for the game settings
-	settings = new Button("Settings");
-	settings.setStyle("-fx-font: 16 Arial; -fx-text-alignment: center");
-	settings.setOnAction(e -> {
-	    new Thread(new Tone(262, 100)).start();
-
-	    settingsScreen.showSettings(pane);
-	});
-	rightPanel.getChildren().add(settings);
-
-	// Add a button that will allow us to return to the main screen
-	returnButton = new Button("Return to\nMain Menu");
-	returnButton.setStyle("-fx-font: 16 Arial; -fx-text-alignment: center");
-	returnButton.setOnAction(e -> {
-	    settingsScreen.stopTrack();
-
-	    new Thread(new Tone(262, 100)).start();
-
-//	    game.start(primaryStage);
-	});
-	rightPanel.getChildren().add(returnButton);
-
 	hBox.getChildren().add(rightPanel);
 	pane.getChildren().add(hBox);
 
-	scene = new Scene(pane);
+	root.setCenter(pane);
 
 	// Add keyboard shortcuts for each button and an option to
 	// toggle full screen mode
-	scene.setOnKeyPressed(e -> {
+	pane.setOnKeyPressed(e -> {
 	    if (e.getCode() == KeyCode.ESCAPE) {
 		returnButton.fire();
 	    } else if (shiftS.match(e)) {
@@ -386,7 +347,7 @@ public class GameBoard {
 	    }
 	});
 
-	return scene;
+	return pane;
     }
 
     void logDisplay(String logEntry) {
@@ -565,7 +526,7 @@ public class GameBoard {
 		group.getChildren().add(selectedCardView);
 
 	    } catch (Exception ex) {
-		System.out.println("Unable to load image from file - check folder.");
+		System.out.println("GameBoard Class (line 518): Unable to load card image from file - check folder.");
 	    }
 
 	    selectToggle = false;

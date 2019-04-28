@@ -10,10 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -84,12 +80,12 @@ public class SiliconGame extends Application {
 	gameControl = new GameControl(this, stage);
 
 	// Create the Scene and Root, then import the JavaFX CSS Stylesheet into Scene.
-	// Root is a standard backdrop for every screen, with a background, logo and a
-	// set of navigation buttons.
+	// Root provides a standard backdrop for every screen, with a background, logo
+	// and a set of navigation buttons.
 	root = createRoot(this);
 	scene = new Scene(root, Monitor.defaultWidth, Monitor.defaultHeight, Color.TRANSPARENT);
 	stage.setScene(scene);
-	scene.getStylesheets().add("SoundStyles.css");
+	scene.getStylesheets().add("SiliconStyles.css");
 
 	// Create the main menu screen
 	showMainMenu = createMainMenu(this);
@@ -101,26 +97,18 @@ public class SiliconGame extends Application {
 
     /*
      * Create the Root node (a BorderPane). The Root holds the background, main logo
-     * and sub-logo, and 4 x navigation buttons (for Settings, High Scores, Credits
-     * and Help). The left, center and bottom sections are free for individual
-     * screens to use. We switch between screens by swapping the contents of these
-     * sections in and out.
+     * and sub-logo, 4 x navigation buttons (for Settings, High Scores, Credits and
+     * Help), and a button to return to the Main Menu screen. The Center section is
+     * free for individual screens to use. We switch between screens by swapping the
+     * contents of this section in and out.
      */
     public BorderPane createRoot(SiliconGame game) {
 	root = new BorderPane();
 	root.setId("bp-root");
 //	root.setGridLinesVisible(true);
 
-	// Set the background image for Root to the initial (non-era) background
-	try {
-	    Image img = new Image("background_for_BIT.jpeg", Monitor.fullWidth, 0, true, true);
-	    BackgroundImage b = new BackgroundImage(img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-		    BackgroundPosition.CENTER,
-		    new BackgroundSize(Monitor.defaultWidth, BackgroundSize.AUTO, false, false, true, false));
-	    root.setBackground(new Background(b));
-	} catch (Exception e) {
-	    System.out.println("SiliconGame Class (lines 116-120): Unable to load 'background_for_BIT.jpeg' - check file system.");
-	}
+	// Set the background image for Root to the generic (non-era) background
+	root.setBackground(new Background(monitor.initBackgrounds()));
 
 	// Create the logo and sub-logo and add them both to Root. The JavaFX CSS file
 	// contains the text settings that make these logos work.
@@ -134,6 +122,7 @@ public class SiliconGame extends Application {
 
 	// Create the "Return to Main Menu" button
 	return2main = new Button("Return to Main Menu");
+	return2main.setTooltip(new Tooltip("Press this button to return to the Main Menu"));
 	return2main.setVisible(false);
 	BorderPane.setAlignment(return2main, Pos.BOTTOM_CENTER);
 
@@ -143,13 +132,29 @@ public class SiliconGame extends Application {
 	    return2main.setVisible(false);
 	});
 
-	// Create a "dummy" VBox for root.Left
-	VBox vbDummy = new VBox();
-	vbDummy.setId("VBox-nav-buttons");
-	BorderPane.setAlignment(vbDummy, Pos.CENTER_LEFT);
+	// Create (game screen) buttons for "Buy a card", "Buy research", "Attack a
+	// card" and "Save game". We create these buttons now, to balance up the
+	// navigation buttons on root.Right.
+	Button bBuy = new Button("Buy");
+	bBuy.setId("button-round");
+	bBuy.setTooltip(new Tooltip("Press this button to buy a card for mega-dollars"));
+	Button bResearch = new Button("Research");
+	bResearch.setId("button-round");
+	bResearch.setTooltip(new Tooltip("Press this button to put some mega-dollars into research"));
+	Button bAttack = new Button("Attack");
+	bAttack.setId("button-round");
+	bAttack.setTooltip(new Tooltip("Press this button to attack another player's card"));
+	Button bSave = new Button("Save");
+	bSave.setId("button-round");
+	bSave.setTooltip(new Tooltip("Press this button to save the game"));
+
+	// Create a VBox for root.Left and add the 4 x Game buttons to it
+	VBox vbGame = new VBox(bBuy, bResearch, bAttack, bSave);
+	vbGame.setId("VBox-nav-buttons");
+	BorderPane.setAlignment(vbGame, Pos.CENTER_LEFT);
 
 	// Create navigation buttons for Settings, High Scores, Credits and Help
-	Button bSettings = new Button("", new ImageView(new Image(getClass().getResourceAsStream("Settings.png"))));
+	Button bSettings = new Button("", new ImageView(new Image(getClass().getResourceAsStream("settings.png"))));
 	bSettings.setId("button-round");
 	bSettings.setTooltip(new Tooltip("Press this button to adjust settings"));
 	Button bScores = new Button("High Scores");
@@ -162,7 +167,7 @@ public class SiliconGame extends Application {
 	bHelp.setId("button-round");
 	bHelp.setTooltip(new Tooltip("Press this button to view the Help file"));
 
-	// Create a VBox to hold the navigation buttons
+	// Create a VBox for root.Right and add the 4 x navigation buttons to it
 	VBox vbNavButtons = new VBox(bSettings, bScores, bCredits, bHelp);
 	vbNavButtons.setId("VBox-nav-buttons");
 	BorderPane.setAlignment(vbNavButtons, Pos.CENTER_RIGHT);
@@ -225,16 +230,18 @@ public class SiliconGame extends Application {
 	    return2main.setVisible(true);
 	});
 
-	// Add everything to root
+	// Add everything to root (NB: Center is free for other screens to use)
 	root.setTop(vbLogo);
-	root.setLeft(vbDummy);
+	root.setLeft(vbGame);
 	root.setRight(vbNavButtons);
 	root.setBottom(return2main);
 	return root;
     }
 
-    // The following method sets up the main menu at the beginning
-    // of the game
+    // If I was strictly following OOP, there'd be a separate class for the root and
+    // MainMenu. However, they are very closely connected, so I've stayed with a
+    // single class to contain both. If this creates any issues with other screens,
+    // then please let me know (of course).
     protected VBox createMainMenu(SiliconGame game) {
 	// Create main menu buttons for Start New Game, Load Game and Exit.
 	// Add the buttons to a visible VBox
@@ -248,15 +255,17 @@ public class SiliconGame extends Application {
 	// *Start New Game*
 	newGame.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
+	    return2main.setVisible(true);
 	    gameLoaded = false;
 	    loadMessage.setText("");
 	    @SuppressWarnings("unused")
-	    GameBoard gameBoard = new GameBoard(game, stage, gameControl, gameLoaded);
+	    GameBoard gameBoard = new GameBoard(game, root, gameControl, gameLoaded);
 	});
 
 	// *Load Game*
 	loadGame.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
+	    return2main.setVisible(true);
 //	    loader.resetData();
 //	    loadMessage.setText(loader.loadData());
 //	    loader.createGame(game, stage, gameControl);

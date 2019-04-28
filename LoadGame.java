@@ -2,6 +2,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 //GRP-COSC2635 2D
@@ -59,7 +60,7 @@ public class LoadGame {
 	loadData = "";
     }
 
-    void createGame(SiliconGame game, Stage primaryStage, GameControl gameControl) {
+    void createGame(SiliconGame game, BorderPane root, GameControl gameControl) {
 	if (loadData.equals(""))
 	    return;
 
@@ -122,7 +123,7 @@ public class LoadGame {
 	gameControl.setGameLog(gameLog);
 
 	@SuppressWarnings("unused")
-	GameBoard gameBoard = new GameBoard(game, primaryStage, gameControl, this);
+	GameBoard gameBoard = new GameBoard(game, root, gameControl, this);
     }
 
     int getPlayerTurn() {
