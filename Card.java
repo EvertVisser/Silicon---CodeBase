@@ -36,11 +36,11 @@ public class Card {
 	location.setOwner(this);
 
 	try {
-	    flipSide = new Image("images/cards/card.png");
-	    display = new Image("images/cards/" + imageName);
+	    flipSide = new Image("card.png");
+	    display = new Image(imageName);
 	    cardView = new ImageView(flipSide);
 	} catch (Exception ex) {
-	    System.out.println("Failed to load card images - check file system");
+	    System.out.println("Card (39-40): Failed to load card images - check file system.");
 	}
 
 	this.socialMedia = socialMedia;

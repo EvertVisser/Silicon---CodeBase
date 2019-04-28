@@ -43,8 +43,8 @@ import javafx.stage.Stage;
 
 public class GameBoard {
     private SiliconGame game;
-    private DisplaySetting display;
-    private SettingsScreen settingsScreen;
+    private Monitor monitor;
+    private Settings settingsScreen;
     private Scene scene;
     private Pane cardPane;
     private Group cardGuideGroup;
@@ -106,7 +106,7 @@ public class GameBoard {
     public GameBoard(SiliconGame game, Stage stage, GameControl gC, boolean gameLoaded) {
 	// Import references to the main stage and GameControl object
 	this.game = game;
-	display = new DisplaySetting();
+	monitor = new Monitor();
 	settingsScreen = game.getSettings();
 	settingsScreen.setGameBoard(this);
 	stage.setFullScreenExitHint("");
@@ -138,7 +138,7 @@ public class GameBoard {
     public GameBoard(SiliconGame game, Stage stage, GameControl gC, LoadGame loadGame) {
 	// Import references to the main stage and GameControl object
 	this.game = game;
-	display = new DisplaySetting();
+	monitor = new Monitor();
 	stage.setFullScreenExitHint("");
 	settingsScreen = game.getSettings();
 	settingsScreen.setGameBoard(this);
@@ -177,19 +177,19 @@ public class GameBoard {
 	StackPane pane = new StackPane();
 
 	try {
-	    Image image1 = new Image("images/background_for_BIT.jpeg");
+	    Image image1 = new Image("background_for_BIT.jpeg");
 	    ImageView view1 = new ImageView(image1);
-	    view1.setFitWidth(display.getFullWidth());
-	    view1.setFitHeight(display.getFullHeight());
+	    view1.setFitWidth(Monitor.fullWidth);
+	    view1.setFitHeight(Monitor.fullHeight);
 	    pane.getChildren().add(view1);
 
-	    Image image2 = new Image("images/iconic-photographs-1940-first-computer.jpg");
+	    Image image2 = new Image("iconic-photographs-1940-first-computer.jpg");
 	    ImageView view2 = new ImageView(image2);
-	    view2.setFitWidth(SiliconGame.DEFAULT_SCREEN_WIDTH);
-	    view2.setFitHeight(SiliconGame.DEFAULT_SCREEN_HEIGHT);
+	    view2.setFitWidth(Monitor.defaultWidth);
+	    view2.setFitHeight(Monitor.defaultHeight);
 	    pane.getChildren().add(view2);
 	} catch (Exception ex) {
-	    System.out.println("Unable to load image from file - check folder.");
+	    System.out.println("GameBoard Class (lines 180-190): Unable to load background images - check folder.");
 	}
 
 	HBox hBox = new HBox(0);
@@ -350,7 +350,7 @@ public class GameBoard {
 
 	    new Thread(new Tone(262, 100)).start();
 
-	    game.start(primaryStage);
+//	    game.start(primaryStage);
 	});
 	rightPanel.getChildren().add(returnButton);
 
