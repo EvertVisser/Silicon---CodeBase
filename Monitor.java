@@ -1,9 +1,11 @@
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 //GRP-COSC2635 2D
 //
@@ -19,6 +21,7 @@ import javafx.stage.Screen;
 // A class that holds variables related to the screen
 
 public class Monitor {
+    static private Stage stage; // Storage for Monitor Class's copy of Stage (used by Fullscreen methods)
     protected static double fullWidth;
     protected static double fullHeight;
     protected static double defaultWidth;
@@ -26,13 +29,17 @@ public class Monitor {
     private double widthRatio;
     private double heightRatio;
 
-    private int numBackgrounds;
+    static private int numBackgrounds;
     private String[] fileNames = { "generic.jpeg", "0-computer.jpg", "1-socialMedia.jpg", "2-surveillance.jpg",
 	    "3-deepState.jpg", "4-drone.jpg", "5-robot.jpg" };
     private Image[] images;
-    private BackgroundImage[] backgrounds;
+    static private BackgroundImage[] backgrounds;
 
-    public Monitor() {
+    static private String oldHint; // Storage for previous hint about KeyCombination to leave Fullscreen mode
+    static private KeyCombination oldKey; // Storage for previous KeyCombination to leave Fullscreen mode
+
+    public Monitor(Stage primaryStage) {
+	stage = primaryStage;
 	fullWidth = Screen.getPrimary().getVisualBounds().getWidth();
 	fullHeight = Screen.getPrimary().getVisualBounds().getHeight();
 
@@ -41,6 +48,8 @@ public class Monitor {
 
 	widthRatio = fullWidth / defaultWidth;
 	heightRatio = fullHeight / defaultHeight;
+	
+	initBackgrounds();
     }
 
     /*
@@ -48,7 +57,7 @@ public class Monitor {
      * Images. SiliconGame.createRoot() calls this method during startup, so we
      * return the "generic.jpeg" BackgroundImage (at index 0) that it needs.
      */
-    protected BackgroundImage initBackgrounds() {
+    protected void initBackgrounds() {
 	numBackgrounds = new GameRules().getNumberOfLevels() + 2;
 	images = new Image[numBackgrounds];
 	backgrounds = new BackgroundImage[numBackgrounds];
@@ -57,13 +66,12 @@ public class Monitor {
 		images[i] = new Image(getClass().getResourceAsStream(fileNames[i]));
 		backgrounds[i] = new BackgroundImage(images[i], BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
 			BackgroundPosition.CENTER,
-			new BackgroundSize(defaultWidth, defaultHeight, false, false, false, true));
+			new BackgroundSize(defaultWidth, defaultHeight, false, false, true, false));
 	    } catch (Exception e) {
 		System.out.println(
 			"Monitor Class (lines 57-60): Unable to load '" + fileNames[i] + "' - check file system.");
 	    }
 	}
-	return backgrounds[0];
     }
 
     /*
@@ -76,12 +84,31 @@ public class Monitor {
      * If the index falls outside these limits (i.e. < 0 or > 6), we return null to
      * signify the error.
      */
-    protected BackgroundImage getBackground(int index) {
+    protected static BackgroundImage getBackground(int index) {
 	if ((index >= 0) && (index < numBackgrounds)) {
 	    return backgrounds[index];
 	} else {
 	    return null;
 	}
+    }
+
+    /*
+     * Methods to enter and leave FullScreen mode. Save and restore the on-screen
+     * hint. Save and restore the key combination (usually ESC). Disable use of the
+     * ESC key to leave FullScreen mode.
+     */
+    protected static void enterFullScreen() {
+	oldHint = stage.getFullScreenExitHint();
+	stage.setFullScreenExitHint("");
+	oldKey = stage.getFullScreenExitKeyCombination();
+	stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+	stage.setFullScreen(true);
+    }
+
+    protected static void leaveFullScreen() {
+	stage.setFullScreenExitHint(oldHint);
+	stage.setFullScreenExitKeyCombination(oldKey);
+	stage.setFullScreen(false);
     }
 
     double getWidthRatio() {

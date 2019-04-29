@@ -22,6 +22,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 //GRP-COSC2635 2D
 //
@@ -41,7 +42,6 @@ import javafx.scene.shape.Rectangle;
 
 public class GameBoard {
     private SiliconGame game;
-    private Monitor monitor;
     private Settings settingsScreen;
     private Pane cardPane;
     private Group cardGuideGroup;
@@ -67,12 +67,8 @@ public class GameBoard {
     private double cardVertYOffset = 18.0;
     private double cardLayoutMargin = 5.0;
 
-    private Button buyCard;
-    private Button attackCard;
-    private Button buyResearch;
     private TextArea text;
     private String logEntries;
-    private Button saveButton;
     private Button settings;
     private Button returnButton;
 
@@ -103,7 +99,6 @@ public class GameBoard {
     public GameBoard(SiliconGame game, BorderPane root, GameControl gC, boolean gameLoaded) {
 	// Import references to the main stage and GameControl object
 	this.game = game;
-	monitor = new Monitor();
 	settingsScreen = game.getSettings();
 	settingsScreen.setGameBoard(this);
 //	stage.setFullScreenExitHint("");
@@ -135,7 +130,6 @@ public class GameBoard {
     public GameBoard(SiliconGame game, BorderPane root, GameControl gC, LoadGame loadGame) {
 	// Import references to the main stage and GameControl object
 	this.game = game;
-	monitor = new Monitor();
 //	stage.setFullScreenExitHint("");
 	settingsScreen = game.getSettings();
 	settingsScreen.setGameBoard(this);
@@ -173,7 +167,7 @@ public class GameBoard {
 
 	StackPane pane = new StackPane();
 
-	pane.setBackground(new Background(monitor.getBackground(1)));
+	pane.setBackground(new Background(Monitor.getBackground(1)));
 
 	HBox hBox = new HBox(0);
 	hBox.setAlignment(Pos.CENTER);
@@ -188,9 +182,7 @@ public class GameBoard {
 	leftPanel.setMaxSize(162, 648);
 	leftPanel.setMinSize(162, 648);
 
-	buyCard = new Button("Buy a Card");
-	buyCard.setStyle("-fx-font: 14 Arial; -fx-text-alignment: center");
-	buyCard.setOnAction(e -> {
+	SiliconGame.bBuy.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
 
 	    if (gameControl.getGameOver()) {
@@ -202,24 +194,18 @@ public class GameBoard {
 		manageMouseClick();
 	    }
 	});
-	leftPanel.getChildren().add(buyCard);
-	attackCard = new Button("Attack a Card");
-	attackCard.setStyle("-fx-font: 14 Arial; -fx-text-alignment: center");
-	attackCard.setOnAction(e -> {
+	SiliconGame.bAttack.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
 
 	    gameControl.newLogEntry("Select opponent card to attack.");
 	    // Turn off other buttons
-	    buyCard.setDisable(true);
-	    attackCard.setDisable(true);
-	    buyResearch.setDisable(true);
+	    SiliconGame.bBuy.setDisable(true);
+	    SiliconGame.bAttack.setDisable(true);
+	    SiliconGame.bResearch.setDisable(true);
 	    gameControl.getAttack().chooseAttack();
 	});
-	attackCard.setDisable(true);
-	leftPanel.getChildren().add(attackCard);
-	buyResearch = new Button("Buy Research");
-	buyResearch.setStyle("-fx-font: 14 Arial; -fx-text-alignment: center");
-	buyResearch.setOnAction(e -> {
+	SiliconGame.bAttack.setDisable(true);
+	SiliconGame.bResearch.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
 
 	    gameControl.newLogEntry("Research card pressed.");
@@ -235,21 +221,19 @@ public class GameBoard {
 		gameControl.updateGameState(move);
 	    }
 	});
-	leftPanel.getChildren().add(buyResearch);
 
 	// The text area will represent a log of the events
 	// taking place in the game.
 	text = new TextArea();
-	text.setMaxWidth(200.0);
-	text.setMaxHeight(250.0);
-	text.setMinHeight(250.0);
+	text.setMaxWidth(375.0);
+	text.setMinWidth(375.00);
+	text.setMaxHeight(650.0);
+	text.setMinHeight(650.0);
 	logEntries = "";
 	text.setText(logEntries);
 	text.setWrapText(true);
 	text.setEditable(false);
-	leftPanel.getChildren().add(text);
-
-	hBox.getChildren().add(leftPanel);
+	SiliconGame.gpGame.add(text,0,0,2,1);
 
 	// The cardPane will represent the playing area
 	cardPane = new Pane();
@@ -305,16 +289,12 @@ public class GameBoard {
 	rightPanel.getChildren().add(scoreDisplay());
 
 	// Add a button that allows the user to save the game
-	saveButton = new Button("Save Game");
-	saveButton.setStyle("-fx-font: 16 Arial; -fx-text-alignment: center");
-	saveButton.setOnAction(e -> {
+	SiliconGame.bSave.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
 
 	    gameControl.getGameState().saveGame();
 
 	});
-	rightPanel.getChildren().add(saveButton);
-
 	hBox.getChildren().add(rightPanel);
 	pane.getChildren().add(hBox);
 
@@ -326,13 +306,13 @@ public class GameBoard {
 	    if (e.getCode() == KeyCode.ESCAPE) {
 		returnButton.fire();
 	    } else if (shiftS.match(e)) {
-		saveButton.fire();
+		SiliconGame.bSave.fire();
 	    } else if (shiftB.match(e)) {
-		buyCard.fire();
+		SiliconGame.bBuy.fire();
 	    } else if (shiftA.match(e)) {
-		attackCard.fire();
+		SiliconGame.bAttack.fire();
 	    } else if (shiftR.match(e)) {
-		buyResearch.fire();
+		SiliconGame.bResearch.fire();
 	    } else if (shiftF.match(e)) {
 		settingsScreen.changeScreen();
 	    } else if (shiftM.match(e)) {
@@ -365,7 +345,7 @@ public class GameBoard {
 	playerNames = new Label[gameControl.getGameRules().getNumberOfPlayers()];
 
 	round = new Label("Round: " + gameControl.getGameState().getGameRound());
-	round.setStyle("-fx-font: 16 Arial; -fx-text-alignment: center");
+	round.setId("button-label");
 	scores.getChildren().add(round);
 
 	for (int i = 0; i < gameControl.getGameRules().getNumberOfPlayers(); i++) {
@@ -463,9 +443,9 @@ public class GameBoard {
 
 	    // Disable other buttons while the player moves
 	    // the card
-	    buyCard.setDisable(true);
-	    attackCard.setDisable(true);
-	    buyResearch.setDisable(true);
+	    SiliconGame.bBuy.setDisable(true);
+	    SiliconGame.bAttack.setDisable(true);
+	    SiliconGame.bResearch.setDisable(true);
 	    removeEventHandlers();
 
 	    selectedCardView.setOnMouseClicked(e -> {
@@ -722,7 +702,7 @@ public class GameBoard {
     }
 
     boolean buyButtonEnabled() {
-	if (buyCard.isDisabled()) {
+	if (SiliconGame.bBuy.isDisabled()) {
 	    return false;
 	} else {
 	    return true;
@@ -730,7 +710,7 @@ public class GameBoard {
     }
 
     boolean attackButtonEnabled() {
-	if (attackCard.isDisabled()) {
+	if (SiliconGame.bAttack.isDisabled()) {
 	    return false;
 	} else {
 	    return true;
@@ -738,7 +718,7 @@ public class GameBoard {
     }
 
     boolean buyResearchEnabled() {
-	if (buyResearch.isDisabled()) {
+	if (SiliconGame.bResearch.isDisabled()) {
 	    return false;
 	} else {
 	    return true;
@@ -746,7 +726,7 @@ public class GameBoard {
     }
 
     boolean saveButtonEnabled() {
-	if (saveButton.isDisabled()) {
+	if (SiliconGame.bSave.isDisabled()) {
 	    return false;
 	} else {
 	    return true;
@@ -754,35 +734,35 @@ public class GameBoard {
     }
 
     void enableBuy() {
-	buyCard.setDisable(false);
+	SiliconGame.bBuy.setDisable(false);
     }
 
     void disableBuy() {
-	buyCard.setDisable(true);
+	SiliconGame.bBuy.setDisable(true);
     }
 
     void enableAttack() {
-	attackCard.setDisable(false);
+	SiliconGame.bAttack.setDisable(false);
     }
 
     void disableAttack() {
-	attackCard.setDisable(true);
+	SiliconGame.bAttack.setDisable(true);
     }
 
     void enableResearch() {
-	buyResearch.setDisable(false);
+	SiliconGame.bResearch.setDisable(false);
     }
 
     void disableResearch() {
-	buyResearch.setDisable(true);
+	SiliconGame.bResearch.setDisable(true);
     }
 
     void enableSave() {
-	saveButton.setDisable(false);
+	SiliconGame.bSave.setDisable(false);
     }
 
     void disableSave() {
-	saveButton.setDisable(true);
+	SiliconGame.bSave.setDisable(true);
     }
 
     void enableSettings() {
@@ -851,10 +831,10 @@ public class GameBoard {
     void gameOver() {
 	drawScores();
 	gameControl.newLogEntry("Game won in " + gameControl.getGameState().getGameRound() + " rounds.");
-	buyCard.setDisable(true);
-	attackCard.setDisable(true);
-	buyResearch.setDisable(true);
-	saveButton.setDisable(true);
+	SiliconGame.bBuy.setDisable(true);
+	SiliconGame.bAttack.setDisable(true);
+	SiliconGame.bResearch.setDisable(true);
+	SiliconGame.bSave.setDisable(true);
     }
 
     LoadGame getLoadGame() {

@@ -38,6 +38,11 @@ public class SiliconGame extends Application {
     private Stage stage;
     private Scene scene;
     public BorderPane root;
+    static protected GridPane gpGame;
+    static protected Button bBuy;
+    static protected Button bAttack;
+    static protected Button bResearch;
+    static protected Button bSave;
     private Button return2main;
     private static GameControl gameControl;
     private Monitor monitor;
@@ -65,15 +70,16 @@ public class SiliconGame extends Application {
      * application thread.
      */
     public void start(Stage primaryStage) {
-	// Get the dimensions of the user's primary screen and use 50% of its width and
+	// Get the dimensions of the user's primary screen and use 75% of its width and
 	// height to set the default dimensions of the Scene
-	monitor = new Monitor();
+	monitor = new Monitor(primaryStage);
 	settings = new Settings(primaryStage, showSettings);
 
 	// Initialise the Stage
 	stage = primaryStage;
 	stage.setTitle("Silicon");
 	stage.initStyle(StageStyle.DECORATED);
+	stage.setAlwaysOnTop(true);
 	stage.setResizable(false);
 	stage.centerOnScreen();
 
@@ -92,7 +98,6 @@ public class SiliconGame extends Application {
 
 	// Show the Stage and ensure it is active
 	this.stage.show();
-	this.stage.toFront();
     }
 
     /*
@@ -105,10 +110,9 @@ public class SiliconGame extends Application {
     public BorderPane createRoot(SiliconGame game) {
 	root = new BorderPane();
 	root.setId("bp-root");
-//	root.setGridLinesVisible(true);
 
 	// Set the background image for Root to the generic (non-era) background
-	root.setBackground(new Background(monitor.initBackgrounds()));
+	root.setBackground(new Background(Monitor.getBackground(0)));
 
 	// Create the logo and sub-logo and add them both to Root. The JavaFX CSS file
 	// contains the text settings that make these logos work.
@@ -130,47 +134,75 @@ public class SiliconGame extends Application {
 	    new Thread(new Tone(262, 100)).start();
 	    root.setCenter(showMainMenu);
 	    return2main.setVisible(false);
+	    gpGame.setVisible(false);
 	});
 
 	// Create (game screen) buttons for "Buy a card", "Buy research", "Attack a
 	// card" and "Save game". We create these buttons now, to balance up the
 	// navigation buttons on root.Right.
-	Button bBuy = new Button("Buy");
+	bBuy = new Button("", new ImageView(new Image(getClass().getResourceAsStream("money.png"))));
 	bBuy.setId("button-round");
 	bBuy.setTooltip(new Tooltip("Press this button to buy a card for mega-dollars"));
-	Button bResearch = new Button("Research");
-	bResearch.setId("button-round");
-	bResearch.setTooltip(new Tooltip("Press this button to put some mega-dollars into research"));
-	Button bAttack = new Button("Attack");
+	bAttack = new Button("", new ImageView(new Image(getClass().getResourceAsStream("ddos.png"))));
 	bAttack.setId("button-round");
 	bAttack.setTooltip(new Tooltip("Press this button to attack another player's card"));
-	Button bSave = new Button("Save");
+	bResearch = new Button("", new ImageView(new Image(getClass().getResourceAsStream("research.png"))));
+	bResearch.setId("button-round");
+	bResearch.setTooltip(new Tooltip("Press this button to put some mega-dollars into research"));
+	bSave = new Button("", new ImageView(new Image(getClass().getResourceAsStream("save-icon-silhouette.png"))));
 	bSave.setId("button-round");
 	bSave.setTooltip(new Tooltip("Press this button to save the game"));
 
-	// Create a VBox for root.Left and add the 4 x Game buttons to it
-	VBox vbGame = new VBox(bBuy, bResearch, bAttack, bSave);
-	vbGame.setId("VBox-nav-buttons");
-	BorderPane.setAlignment(vbGame, Pos.CENTER_LEFT);
+	// Create a Label for each Button
+	Label lBuy = new Label("Buy a Card");
+	lBuy.setId("button-label");
+	Label lAttack = new Label("Attack a Card");
+	lAttack.setId("button-label");
+	Label lResearch = new Label("Buy Research");
+	lResearch.setId("button-label");
+	Label lSave = new Label("Save Game");
+	lSave.setId("button-label");
+	
+	// Create a GridPane for root.Left and add the 4 x Game buttons (with their Labels) to it
+	gpGame = new GridPane();
+	gpGame.setId("grid-pane-nav-buttons");
+	BorderPane.setAlignment(gpGame, Pos.CENTER_LEFT);
+	gpGame.addRow(1, bBuy, lBuy);
+	gpGame.addRow(2, bAttack, lAttack);
+	gpGame.addRow(3, bResearch, lResearch);
+	gpGame.addRow(4, bSave, lSave);
+	gpGame.setVisible(false);
+
+	// Create a Label for each navigation button
+	Label lSettings = new Label("Show Settings");
+	lSettings.setId("button-label");
+	Label lScores = new Label("High Scores");
+	lScores.setId("button-label");
+	Label lCredits = new Label("View Credits");
+	lCredits.setId("button-label");
+	Label lHelp = new Label("Help");
+	lHelp.setId("button-label");
 
 	// Create navigation buttons for Settings, High Scores, Credits and Help
-	Button bSettings = new Button("", new ImageView(new Image(getClass().getResourceAsStream("settings.png"))));
+	Button bSettings = new Button("", new ImageView(new Image(getClass().getResourceAsStream("settings-work-tool.png"))));
 	bSettings.setId("button-round");
 	bSettings.setTooltip(new Tooltip("Press this button to adjust settings"));
-	Button bScores = new Button("High Scores");
+	Button bScores = new Button("", new ImageView(new Image(getClass().getResourceAsStream("trophy_3.png"))));
 	bScores.setId("button-round");
 	bScores.setTooltip(new Tooltip("Press this button to see the High Score table"));
-	Button bCredits = new Button("Credits");
+	Button bCredits = new Button("", new ImageView(new Image(getClass().getResourceAsStream("film-roll_1.png"))));
 	bCredits.setId("button-round");
 	bCredits.setTooltip(new Tooltip("Press this button to see the game credits"));
-	Button bHelp = new Button("Help");
+	Button bHelp = new Button("", new ImageView(new Image(getClass().getResourceAsStream("question_3.png"))));
 	bHelp.setId("button-round");
 	bHelp.setTooltip(new Tooltip("Press this button to view the Help file"));
-
-	// Create a VBox for root.Right and add the 4 x navigation buttons to it
-	VBox vbNavButtons = new VBox(bSettings, bScores, bCredits, bHelp);
-	vbNavButtons.setId("VBox-nav-buttons");
-	BorderPane.setAlignment(vbNavButtons, Pos.CENTER_RIGHT);
+	
+	// Create a GridPane for root.Right and add the 4 x navigation buttons (with their Labels) to it
+	GridPane gpNavButtons = new GridPane();
+	gpNavButtons.setId("grid-pane-nav-buttons");
+	BorderPane.setAlignment(gpNavButtons, Pos.BOTTOM_RIGHT);
+	gpNavButtons.addColumn(0, lSettings, lScores, lCredits, lHelp);
+	gpNavButtons.addColumn(1, bSettings, bScores, bCredits, bHelp);
 
 	// Create a keyboard shortcut for each navigation button
 	root.setOnKeyPressed(e -> {
@@ -232,8 +264,8 @@ public class SiliconGame extends Application {
 
 	// Add everything to root (NB: Center is free for other screens to use)
 	root.setTop(vbLogo);
-	root.setLeft(vbGame);
-	root.setRight(vbNavButtons);
+	root.setLeft(gpGame);
+	root.setRight(gpNavButtons);
 	root.setBottom(return2main);
 	return root;
     }
@@ -255,6 +287,7 @@ public class SiliconGame extends Application {
 	// *Start New Game*
 	newGame.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
+	    gpGame.setVisible(true);
 	    return2main.setVisible(true);
 	    gameLoaded = false;
 	    loadMessage.setText("");
@@ -265,6 +298,7 @@ public class SiliconGame extends Application {
 	// *Load Game*
 	loadGame.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
+	    gpGame.setVisible(true);
 	    return2main.setVisible(true);
 //	    loader.resetData();
 //	    loadMessage.setText(loader.loadData());
