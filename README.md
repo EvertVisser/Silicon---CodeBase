@@ -8,7 +8,9 @@ Silicon game files:
 
 These files are the result of the extensive recent pruning and harmonisation of the team's codebase.  You can now play through an entire game on the "generic + research level 0" background, and I am working, with my coding colleagues of course (i.e. Dao), to improve the user experience ...
 
-To compile, do the following in Windows Explorer:
+I've uploaded a Windows executable that seems to work on my system ... these things are very "touchy", though, so it may not work on yours.  Nonetheless, I'd be very interested to see whether it works "out of the box" for anyone else!
+
+However, to compile the game for yourself, do the following in Windows Explorer:
 
 1. Put all the .java files in the /src folder.  This is usually in "C:\Users\\[username]\eclipse-workspace\\[projectname]" for Windows PCs, not so sure about other OSs.
 2. Unzip the resources.zip file into the /src folder (it should create 4 sub-folders: /src/data, /src/images and /src/sounds.  Yes, that's only 3: /src/images has its own sub-folder: /src/images/cards).
