@@ -11,9 +11,9 @@ These files are the result of the extensive recent pruning and harmonisation of 
 To compile, do the following in Windows Explorer:
 
 1. Put all the .java files in the /src folder.  This is usually in "C:\Users\[username]\eclipse-workspace\[projectname]" for Windows PCs, not so sure about other OSs.
-2. Unzip the resources.zip file into the /src folder (it should create 4 sub-folders: /src/data, /src/images and /src/sounds.  Yes, that's only 3: /src/images has its own sub-folder: /src/images/cards.
+2. Unzip the resources.zip file into the /src folder (it should create 4 sub-folders: /src/data, /src/images and /src/sounds.  Yes, that's only 3: /src/images has its own sub-folder: /src/images/cards).
 3. Is there a /bin folder alongside your /src folder (i.e. both should be sub-folders of your Project folder, as in Silicon/src and Silicon/bin)?  If not, you'll need to create one.
-4. Either: (a) re-unzip the resources.zip file into the /bin folder (it should create 4 more sub-folders: /bin/data, /bin/images, /bin/images/cards and /bin/sounds; or (b) just copy the three top sub-folders from the /src folder to the /bin folder.
+4. Either: (a) re-unzip the resources.zip file into the /bin folder (it should create 4 more sub-folders: /bin/data, /bin/images, /bin/images/cards and /bin/sounds); or (b) just copy the three top sub-folders from the /src folder to the /bin folder.
 
 
 Then, do the following in Eclipse (or the equivalent in your IDE of choice):
