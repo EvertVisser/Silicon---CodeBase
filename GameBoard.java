@@ -22,7 +22,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 //GRP-COSC2635 2D
 //
@@ -99,7 +98,7 @@ public class GameBoard {
     public GameBoard(SiliconGame game, BorderPane root, GameControl gC, boolean gameLoaded) {
 	// Import references to the main stage and GameControl object
 	this.game = game;
-	settingsScreen = game.getSettings();
+	settingsScreen = this.game.getSettings();
 	settingsScreen.setGameBoard(this);
 //	stage.setFullScreenExitHint("");
 	this.root = root;
@@ -111,7 +110,7 @@ public class GameBoard {
 	mainDeckXCoord = gameControl.getGameRules().getMainDeckX();
 	mainDeckYCoord = gameControl.getGameRules().getMainDeckY();
 
-	root.setCenter(setupBoard(root));
+	this.root.setCenter(setupBoard(this.root));
 	if (settingsScreen.getFullScreen()) {
 	    settingsScreen.setFullScreen(false);
 	    settingsScreen.changeScreen();
@@ -131,7 +130,7 @@ public class GameBoard {
 	// Import references to the main stage and GameControl object
 	this.game = game;
 //	stage.setFullScreenExitHint("");
-	settingsScreen = game.getSettings();
+	settingsScreen = this.game.getSettings();
 	settingsScreen.setGameBoard(this);
 	this.root = root;
 	gameControl = gC;
@@ -143,7 +142,7 @@ public class GameBoard {
 	deck = gameControl.getGameState().getDeck();
 	mainDeckXCoord = gameControl.getGameRules().getMainDeckX();
 	mainDeckYCoord = gameControl.getGameRules().getMainDeckY();
-	root.setTop(setupBoard(root));
+	this.root.setTop(setupBoard(this.root));
 	if (settingsScreen.getFullScreen()) {
 	    settingsScreen.setFullScreen(false);
 	    settingsScreen.changeScreen();
@@ -233,7 +232,7 @@ public class GameBoard {
 	text.setText(logEntries);
 	text.setWrapText(true);
 	text.setEditable(false);
-	SiliconGame.gpGame.add(text,0,0,2,1);
+	SiliconGame.gpGame.add(text, 0, 0, 2, 1);
 
 	// The cardPane will represent the playing area
 	cardPane = new Pane();
