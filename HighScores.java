@@ -35,7 +35,8 @@ public class HighScores {
 
 	    String[] highScoresLine = highScoresTable.split(",");
 	    for (int i = 0; i < 5; i++) {
-		showHighScores.appendText(String.format("%-16s %8s\n", highScoresLine[i * 3], highScoresLine[i * 3 + 2]));
+		showHighScores
+			.appendText(String.format("%-16s %8s\n", highScoresLine[i * 3], highScoresLine[i * 3 + 2]));
 	    }
 	} catch (Exception e) {
 	    System.out.println("HighScores Class (lines 31-38): Unable to load 'high_scores.txt' - file error.");

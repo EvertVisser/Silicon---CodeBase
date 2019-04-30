@@ -48,7 +48,7 @@ public class Monitor {
 
 	widthRatio = fullWidth / defaultWidth;
 	heightRatio = fullHeight / defaultHeight;
-	
+
 	initBackgrounds();
     }
 

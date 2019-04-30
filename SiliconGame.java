@@ -38,11 +38,8 @@ public class SiliconGame extends Application {
     private Stage stage;
     private Scene scene;
     public BorderPane root;
-    static protected GridPane gpGame;
-    static protected Button bBuy;
-    static protected Button bAttack;
-    static protected Button bResearch;
-    static protected Button bSave;
+    static protected VBox vbLeft;
+    static protected VBox vbRight;
     private Button return2main;
     private static GameControl gameControl;
     private Monitor monitor;
@@ -97,6 +94,7 @@ public class SiliconGame extends Application {
 	showMainMenu = createMainMenu(this);
 
 	// Show the Stage and ensure it is active
+	root.requestLayout();
 	this.stage.show();
     }
 
@@ -134,44 +132,7 @@ public class SiliconGame extends Application {
 	    new Thread(new Tone(262, 100)).start();
 	    root.setCenter(showMainMenu);
 	    return2main.setVisible(false);
-	    gpGame.setVisible(false);
 	});
-
-	// Create (game screen) buttons for "Buy a card", "Buy research", "Attack a
-	// card" and "Save game". We create these buttons now, to balance up the
-	// navigation buttons on root.Right.
-	bBuy = new Button("", new ImageView(new Image(getClass().getResourceAsStream("money.png"))));
-	bBuy.setId("button-round");
-	bBuy.setTooltip(new Tooltip("Press this button to buy a card for mega-dollars"));
-	bAttack = new Button("", new ImageView(new Image(getClass().getResourceAsStream("ddos.png"))));
-	bAttack.setId("button-round");
-	bAttack.setTooltip(new Tooltip("Press this button to attack another player's card"));
-	bResearch = new Button("", new ImageView(new Image(getClass().getResourceAsStream("research.png"))));
-	bResearch.setId("button-round");
-	bResearch.setTooltip(new Tooltip("Press this button to put some mega-dollars into research"));
-	bSave = new Button("", new ImageView(new Image(getClass().getResourceAsStream("save-icon-silhouette.png"))));
-	bSave.setId("button-round");
-	bSave.setTooltip(new Tooltip("Press this button to save the game"));
-
-	// Create a Label for each Button
-	Label lBuy = new Label("Buy a Card");
-	lBuy.setId("button-label");
-	Label lAttack = new Label("Attack a Card");
-	lAttack.setId("button-label");
-	Label lResearch = new Label("Buy Research");
-	lResearch.setId("button-label");
-	Label lSave = new Label("Save Game");
-	lSave.setId("button-label");
-	
-	// Create a GridPane for root.Left and add the 4 x Game buttons (with their Labels) to it
-	gpGame = new GridPane();
-	gpGame.setId("grid-pane-nav-buttons");
-	BorderPane.setAlignment(gpGame, Pos.CENTER_LEFT);
-	gpGame.addRow(1, bBuy, lBuy);
-	gpGame.addRow(2, bAttack, lAttack);
-	gpGame.addRow(3, bResearch, lResearch);
-	gpGame.addRow(4, bSave, lSave);
-	gpGame.setVisible(false);
 
 	// Create a Label for each navigation button
 	Label lSettings = new Label("Show Settings");
@@ -184,7 +145,8 @@ public class SiliconGame extends Application {
 	lHelp.setId("button-label");
 
 	// Create navigation buttons for Settings, High Scores, Credits and Help
-	Button bSettings = new Button("", new ImageView(new Image(getClass().getResourceAsStream("settings-work-tool.png"))));
+	Button bSettings = new Button("",
+		new ImageView(new Image(getClass().getResourceAsStream("settings-work-tool.png"))));
 	bSettings.setId("button-round");
 	bSettings.setTooltip(new Tooltip("Press this button to adjust settings"));
 	Button bScores = new Button("", new ImageView(new Image(getClass().getResourceAsStream("trophy_3.png"))));
@@ -196,11 +158,11 @@ public class SiliconGame extends Application {
 	Button bHelp = new Button("", new ImageView(new Image(getClass().getResourceAsStream("question_3.png"))));
 	bHelp.setId("button-round");
 	bHelp.setTooltip(new Tooltip("Press this button to view the Help file"));
-	
-	// Create a GridPane for root.Right and add the 4 x navigation buttons (with their Labels) to it
+
+	// Create a GridPane for root.Right and add the 4 x navigation buttons (with
+	// their Labels) to it
 	GridPane gpNavButtons = new GridPane();
 	gpNavButtons.setId("grid-pane-nav-buttons");
-	BorderPane.setAlignment(gpNavButtons, Pos.BOTTOM_RIGHT);
 	gpNavButtons.addColumn(0, lSettings, lScores, lCredits, lHelp);
 	gpNavButtons.addColumn(1, bSettings, bScores, bCredits, bHelp);
 
@@ -262,15 +224,24 @@ public class SiliconGame extends Application {
 	    return2main.setVisible(true);
 	});
 
-	// Add everything to root (NB: Center is free for other screens to use)
+	// Add everything to root (NB: Center and the VBoxes are free for other screens
+	// to use)
+	vbLeft = new VBox();
+	vbLeft.setId("VBox-invis");
+	vbLeft.setAlignment(Pos.TOP_LEFT);
+	BorderPane.setAlignment(vbLeft, Pos.TOP_LEFT);
+	vbRight = new VBox(gpNavButtons);
+	vbRight.setId("VBox-invis");
+	vbRight.setAlignment(Pos.TOP_RIGHT);
+	BorderPane.setAlignment(vbRight, Pos.TOP_RIGHT);
 	root.setTop(vbLogo);
-	root.setLeft(gpGame);
-	root.setRight(gpNavButtons);
+	root.setLeft(vbLeft);
+	root.setRight(vbRight);
 	root.setBottom(return2main);
 	return root;
     }
 
-    // If I was strictly following OOP, there'd be a separate class for the root and
+    // If I was following OOP strictly, there'd be a separate class for the root and
     // MainMenu. However, they are very closely connected, so I've stayed with a
     // single class to contain both. If this creates any issues with other screens,
     // then please let me know (of course).
@@ -287,7 +258,6 @@ public class SiliconGame extends Application {
 	// *Start New Game*
 	newGame.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
-	    gpGame.setVisible(true);
 	    return2main.setVisible(true);
 	    gameLoaded = false;
 	    loadMessage.setText("");
@@ -298,7 +268,6 @@ public class SiliconGame extends Application {
 	// *Load Game*
 	loadGame.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
-	    gpGame.setVisible(true);
 	    return2main.setVisible(true);
 //	    loader.resetData();
 //	    loadMessage.setText(loader.loadData());

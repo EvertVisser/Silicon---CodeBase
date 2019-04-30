@@ -153,7 +153,7 @@ public class GameControl {
 	    gameState.movePointer();
 	}
 
-	newLogEntry(" ***  Silicon - game commencing   *** ");
+	newLogEntry("  ***  Silicon - game commencing  ***  ");
 	gameBoard.drawScores();
 	newLogEntry("Player 1 choose an option.");
 	// No need to test for the attack button option at the start of the game

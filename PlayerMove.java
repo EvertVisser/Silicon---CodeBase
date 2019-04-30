@@ -15,45 +15,38 @@
 // in at a location on the card table, can attempt a take-over
 // of another player's card or can choose to convert money
 // into research.
-public class PlayerMove
-{
-   // The three types for moveType are 'Buy Card', 'Attack Card' and 'Research'
-   private String moveType;
-   private Card card;
-   private int cost;
-   private int research;
-   
-   // The following three constructors represent the three different move
-   // types.
-   public PlayerMove(String moveType, Card card, int cost)
-   {
-	   this.moveType = moveType;
-	   this.card = card;
-	   this.cost = cost;
-   }
-   
-   public PlayerMove(String moveType)
-   {
-	   this.moveType = moveType;
-   }
-   
-   String getMoveType()
-   {
-	   return moveType;
-   }
-   
-   int getCost()
-   {
-	   return cost;
-   }
-   
-   Card getCard()
-   {
-	   return card;
-   }
-   
-   int getResearch()
-   {
-	   return research;
-   }
+public class PlayerMove {
+    // The three types for moveType are 'Buy Card', 'Attack Card' and 'Research'
+    private String moveType;
+    private Card card;
+    private int cost;
+    private int research;
+
+    // The following three constructors represent the three different move
+    // types.
+    public PlayerMove(String moveType, Card card, int cost) {
+	this.moveType = moveType;
+	this.card = card;
+	this.cost = cost;
+    }
+
+    public PlayerMove(String moveType) {
+	this.moveType = moveType;
+    }
+
+    String getMoveType() {
+	return moveType;
+    }
+
+    int getCost() {
+	return cost;
+    }
+
+    Card getCard() {
+	return card;
+    }
+
+    int getResearch() {
+	return research;
+    }
 }

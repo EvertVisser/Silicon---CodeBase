@@ -40,7 +40,7 @@ public class Card {
 	    display = new Image(imageName);
 	    cardView = new ImageView(flipSide);
 	} catch (Exception ex) {
-	    System.out.println("Card (39-40): Failed to load card images - check file system.");
+	    System.out.println("Card Class (lines 39-40): Failed to load card images - check file system.");
 	}
 
 	this.socialMedia = socialMedia;
