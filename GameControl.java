@@ -22,7 +22,7 @@ public class GameControl {
     @SuppressWarnings("unused")
     private SiliconGame game;
     @SuppressWarnings("unused")
-    private Stage primaryStage;
+    private Stage stage;
     private GameState gameState;
     private GameRules gameRules;
     private GameBoard gameBoard;
@@ -37,7 +37,7 @@ public class GameControl {
 
     public GameControl(SiliconGame game, Stage primaryStage) {
 	this.game = game;
-	this.primaryStage = primaryStage;
+	stage = primaryStage;
 	gameRules = new GameRules();
 	gameOver = false;
 	gameLog = new ArrayList<String>();
@@ -304,6 +304,14 @@ public class GameControl {
 	}
     }
 
+    /*
+     * NOTE TO DAO: Looks like this is another piece of the existing AI. It has no
+     * bias in favour of any one of the possible moves, which definitely provides
+     * scope for improvement. Moreover, it places its new cards completely randomly,
+     * both as regards to orientation (horizontal/vertical) and location. It should
+     * not be too difficult to, instead, have each AI maintain a "preferred target",
+     * and have it place its cards in the direction of the target.
+     */
     PlayerMove computerTurn() {
 	PlayerMove compMove = null;
 	boolean[] choices = new boolean[3];
