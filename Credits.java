@@ -21,7 +21,7 @@ public class Credits {
 	    Image image = new Image("credits.jpg", Monitor.defaultWidth / 2, Monitor.defaultWidth / 2.5, true, true);
 	    showCredits = new ImageView(image);
 	} catch (Exception ex) {
-	    System.out.println("Credits Class (line 21-22): Unable to load 'credits.jpg' - check file system.");
+	    System.out.println("Credits Class (lines 21-22): Unable to load 'credits.jpg' - check file system.");
 	}
 	return showCredits;
     }

@@ -305,6 +305,67 @@ public class GameControl {
     }
 
     /*
+     * Simple binary sort to rank the players based on their (1) research level or,
+     * in the case of a "tie", (2) accumulated research. GameBoard.displayScores
+     * uses this method to sort the players in the Current Scores TextArea.
+     * GameBoard. also uses it to identify the highest research level, which
+     * determines the background image.
+     */
+    public int[] rankPlayers() {
+	int temp;
+	int[] index = { 0, 1, 2, 3 };
+
+	// Rank the first pair of players
+	if (maxPlayers(0, 1) == 1) {
+	    index[0] = 1;
+	    index[1] = 0;
+	}
+	// Rank the second pair of players
+	if (maxPlayers(2, 3) == 3) {
+	    index[2] = 3;
+	    index[3] = 2;
+	}
+	// Determine the top-ranked player
+	if (maxPlayers(index[0], index[2]) == index[2]) {
+	    temp = index[0];
+	    index[0] = index[2];
+	    index[2] = temp;
+	}
+	// Determine the bottom-ranked player
+	if (maxPlayers(index[1], index[3]) == index[3]) {
+	    temp = index[1];
+	    index[1] = index[3];
+	    index[3] = temp;
+	}
+	// Rank the "middle pair" of players and we're done
+	if (maxPlayers(index[1], index[2]) == index[2]) {
+	    temp = index[1];
+	    index[1] = index[2];
+	    index[2] = temp;
+	}
+	return index;
+    }
+
+    /*
+     * maxPlayers: as noted above, this method ranks two players based on their (1) research level or,
+     * in the case of a "tie", (2) accumulated research.  The higher-ranked of the two is returned.
+     */
+    private int maxPlayers(int p1, int p2) {
+	int diff = players[p2].getModuleLevel() - players[p1].getModuleLevel();
+	if (diff > 0)
+	    return p2;
+	else if (diff < 0)
+	    return p1;
+	else {
+	    diff = players[p2].getResearch() - players[p1].getResearch();
+	    if (diff > 0)
+		return p2;
+	    else
+		return p1;
+	}
+    }
+
+    /*
      * NOTE TO DAO: Looks like this is another piece of the existing AI. It has no
      * bias in favour of any one of the possible moves, which definitely provides
      * scope for improvement. Moreover, it places its new cards completely randomly,

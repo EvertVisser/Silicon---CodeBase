@@ -132,17 +132,18 @@ public class SiliconGame extends Application {
 	    new Thread(new Tone(262, 100)).start();
 	    root.setCenter(showMainMenu);
 	    return2main.setVisible(false);
+	    vbLeft.setVisible(false);
 	});
 
 	// Create a Label for each navigation button
 	Label lSettings = new Label("Show Settings");
-	lSettings.setId("button-label");
+	lSettings.setId("button-label-right");
 	Label lScores = new Label("High Scores");
-	lScores.setId("button-label");
+	lScores.setId("button-label-right");
 	Label lCredits = new Label("View Credits");
-	lCredits.setId("button-label");
+	lCredits.setId("button-label-right");
 	Label lHelp = new Label("Help");
-	lHelp.setId("button-label");
+	lHelp.setId("button-label-right");
 
 	// Create navigation buttons for Settings, High Scores, Credits and Help
 	Button bSettings = new Button("",
@@ -162,6 +163,7 @@ public class SiliconGame extends Application {
 	// Create a GridPane for root.Right and add the 4 x navigation buttons (with
 	// their Labels) to it
 	GridPane gpNavButtons = new GridPane();
+	// gpNavButtons.setGridLinesVisible(true);
 	gpNavButtons.setId("grid-pane-nav-buttons");
 	gpNavButtons.addColumn(0, lSettings, lScores, lCredits, lHelp);
 	gpNavButtons.addColumn(1, bSettings, bScores, bCredits, bHelp);
@@ -227,12 +229,10 @@ public class SiliconGame extends Application {
 	// Add everything to root (NB: Center and the VBoxes are free for other screens
 	// to use)
 	vbLeft = new VBox();
-	vbLeft.setId("VBox-invis");
-	vbLeft.setAlignment(Pos.TOP_LEFT);
+	vbLeft.setId("VBox-left");
 	BorderPane.setAlignment(vbLeft, Pos.TOP_LEFT);
 	vbRight = new VBox(gpNavButtons);
-	vbRight.setId("VBox-invis");
-	vbRight.setAlignment(Pos.TOP_RIGHT);
+	vbRight.setId("VBox-right");
 	BorderPane.setAlignment(vbRight, Pos.TOP_RIGHT);
 	root.setTop(vbLogo);
 	root.setLeft(vbLeft);

@@ -80,7 +80,7 @@ public class Player {
      * display the current score for each player.
      */
     String getScore() {
-	return String.format("%10d%10d%10d\n", money, research, moduleLevel);
+	return String.format("%10d%10d%7d\n", money, research, moduleLevel);
     }
 
     Color getColour() {

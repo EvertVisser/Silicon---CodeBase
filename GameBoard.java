@@ -74,19 +74,15 @@ public class GameBoard {
     private Button buyCard;
     private Button attackCard;
     private Button buyResearch;
-    private TextArea taLog;
-    private TextArea taScores;
+    private TextArea taLog = null;
+    private TextArea taScores = null;
     private Button saveButton;
     private Button settings;
     private Button returnButton;
 
     private LoadGame loadGame;
+    @SuppressWarnings("unused")
     private boolean gameLoaded;
-
-    private VBox scores;
-    private Label round;
-    private Label[] playerNames;
-    private Label[] playerScores;
 
     // Keyboard commands available to use from the gameboard:
     // shift B to buy a card
@@ -209,13 +205,13 @@ public class GameBoard {
 
 	// Create a Label for each Button
 	Label lBuy = new Label("Buy a Card");
-	lBuy.setId("button-label");
+	lBuy.setId("button-label-left");
 	Label lAttack = new Label("Attack a Card");
-	lAttack.setId("button-label");
+	lAttack.setId("button-label-left");
 	Label lResearch = new Label("Buy Research");
-	lResearch.setId("button-label");
+	lResearch.setId("button-label-left");
 	Label lSave = new Label("Save Game");
-	lSave.setId("button-label");
+	lSave.setId("button-label-left");
 
 	// Specify the actions for each Game button (lambda definitions)
 	// *Buy a card*
@@ -376,8 +372,8 @@ public class GameBoard {
 	Player[] players = gameControl.getPlayers();
 	taScores.setText("  ***   CURRENT SCORES   ***\n");
 	taScores.appendText("Round: " + gameControl.getGameState().getGameRound() + "\n");
-	taScores.appendText(String.format("%-10s%10s%10s%10s\n", "Player", "MB", "Research", "Level"));
-	taScores.appendText(String.format("%-10s%10s%10s%10s\n", "------", "--", "--------", "-----"));
+	taScores.appendText(String.format("%-10s%13s%10s%7s\n", "Player", "MB", "Research", "Level"));
+	taScores.appendText(String.format("%-10s%13s%10s%7s\n", "------", "--", "--------", "-----"));
 	for (int i = 0; i < gameControl.getGameRules().getNumberOfPlayers(); i++) {
 	    taScores.appendText(String.format("%-10s", players[i].getName()));
 	    taScores.appendText(players[i].getScore());
@@ -391,13 +387,14 @@ public class GameBoard {
      */
     void displayScores() {
 	Player[] players = gameControl.getPlayers();
+	int[] index = gameControl.rankPlayers();
 	taScores.setText("  ***   CURRENT SCORES   ***\n");
 	taScores.appendText("Round: " + gameControl.getGameState().getGameRound() + "\n");
-	taScores.appendText(String.format("%-10s%10s%10s%10s\n", "Player", "MB", "Research", "Level"));
-	taScores.appendText(String.format("%-10s%10s%10s%10s\n", "------", "--", "--------", "-----"));
+	taScores.appendText(String.format("%-10s%13s%10s%7s\n", "Player", "MB", "Research", "Level"));
+	taScores.appendText(String.format("%-10s%13s%10s%7s\n", "------", "--", "--------", "-----"));
 	for (int i = 0; i < gameControl.getGameRules().getNumberOfPlayers(); i++) {
-	    taScores.appendText(String.format("%-10s", players[i].getName()));
-	    taScores.appendText(players[i].getScore());
+	    taScores.appendText(String.format("%d. %-10s", i + 1, players[index[i]].getName()));
+	    taScores.appendText(players[index[i]].getScore());
 	}
     }
 
