@@ -8,7 +8,7 @@ Silicon game files:
 
 These files are the result of the extensive recent pruning and harmonisation of the team's codebase.  You can now play through an entire game on the "generic + research level 0" background, and I am working, with my coding colleagues of course (i.e. Dao), to improve the user experience ...
 
-I've uploaded a Windows executable that seems to work on my system ... these things are very "touchy", though, so it may not work on yours.  Nonetheless, I'd be very interested to see whether it works "out of the box" for anyone else!
+I've uploaded a Windows executable that seems to work on my system ... these things are very "touchy", though, so it may not work on yours.  Nonetheless, I'd be very interested to see whether it works "out of the box" for anyone else!  There is also an executable ".jar" file for non-Windows users.
 
 However, to compile the game for yourself, do the following in Windows Explorer:
 
