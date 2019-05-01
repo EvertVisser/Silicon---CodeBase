@@ -54,8 +54,7 @@ public class Monitor {
 
     /*
      * initBackgrounds(): Populates the arrays of BackgroundImages and their base
-     * Images. SiliconGame.createRoot() calls this method during startup, so we
-     * return the "generic.jpeg" BackgroundImage (at index 0) that it needs.
+     * Images, for use by the getBackground() method - see below.
      */
     protected void initBackgrounds() {
 	numBackgrounds = new GameRules().getNumberOfLevels() + 2;
@@ -69,7 +68,7 @@ public class Monitor {
 			new BackgroundSize(defaultWidth, defaultHeight, false, false, true, false));
 	    } catch (Exception e) {
 		System.out.println(
-			"Monitor Class (lines 57-60): Unable to load '" + fileNames[i] + "' - check file system.");
+			"Monitor Class (lines 70-73): Unable to load '" + fileNames[i] + "' - check file system.");
 	    }
 	}
     }
@@ -81,8 +80,15 @@ public class Monitor {
      * correspond to research levels 1 to 4, and index 6 is the "victory" background
      * for research level = 5.
      * 
-     * If the index falls outside these limits (i.e. < 0 or > 6), we return null to
-     * signify the error.
+     * If the caller's index falls outside these limits (i.e. currently < 0 or > 6),
+     * we return null to signify the error.
+     * 
+     * SiliconGame.createRoot calls this method during startup to set Root's generic
+     * background. GameBoard.setupBoard calls it to set the initial (research level
+     * 0) background, GameControl.updateRound calls it to set the appropriate
+     * background image based on the highest research level achieved by any player,
+     * as do GameControl.updateGameState and GameControl.addResearch (in both cases,
+     * to display the "Vector" background when a player wins).
      */
     protected static BackgroundImage getBackground(int index) {
 	if ((index >= 0) && (index < numBackgrounds)) {
@@ -93,9 +99,10 @@ public class Monitor {
     }
 
     /*
-     * Methods to enter and leave FullScreen mode. Save and restore the on-screen
-     * hint. Save and restore the key combination (usually ESC). Disable use of the
-     * ESC key to leave FullScreen mode.
+     * Methods to enter and leave FullScreen mode. We save and restore the on-screen
+     * hint. We also save and restore the key combination (usually ESC). These are,
+     * of course, precursors to disabling use of the ESC key to leave FullScreen
+     * mode - which we aren't doing (currently).
      */
     protected static void enterFullScreen() {
 	oldHint = stage.getFullScreenExitHint();

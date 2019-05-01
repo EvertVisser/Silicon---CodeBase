@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.stage.Stage;
 
 //GRP-COSC2635 2D
@@ -188,6 +189,7 @@ public class GameControl {
 		upgradeAbilities(player);
 
 		if (player.getModuleLevel() == 5) {
+		    gameBoard.pane.setBackground(new Background(Monitor.getBackground(6)));
 		    newLogEntry(player.getName() + " has achieved victory.");
 		    gameOver = true;
 		    gameBoard.gameOver();
@@ -242,6 +244,8 @@ public class GameControl {
     void updateRound() {
 	gameBoard.cardOutlines(players[playerTurn]);
 	addResearch();
+	int[] index = rankPlayers();
+	gameBoard.pane.setBackground(new Background(Monitor.getBackground(players[index[0]].getModuleLevel() + 1)));
 	if (gameOver)
 	    return;
 	gameState.nextRound();
@@ -296,6 +300,7 @@ public class GameControl {
 
 		if (players[i].getModuleLevel() == 5) {
 		    newLogEntry(players[i].getName() + " has achieved victory.");
+		    gameBoard.pane.setBackground(new Background(Monitor.getBackground(6)));
 		    gameOver = true;
 		    gameBoard.gameOver();
 		    return;
@@ -305,11 +310,21 @@ public class GameControl {
     }
 
     /*
-     * Simple binary sort to rank the players based on their (1) research level or,
-     * in the case of a "tie", (2) accumulated research. GameBoard.displayScores
-     * uses this method to sort the players in the Current Scores TextArea.
-     * GameBoard. also uses it to identify the highest research level, which
-     * determines the background image.
+     * rankPlayers(): Simple binary sort to rank all four players based on (1) their
+     * research level, (2) accumulated research, and then (3) accumulated money. The
+     * method returns an array of indexes into the Player.player[] array, ordered
+     * from highest-ranked (index[0]) to lowest (index[3]).
+     * 
+     * Obviously, if we decide to increase the number of players beyond 4, this
+     * method will need modest expansion to accommodate the extras. Ultimately, we
+     * could simply overload "compare" with the maxPlayers() method and use the
+     * system sort instead.
+     * 
+     * GameBoard.displayScores uses rankPlayers() to sort the players in the Current
+     * Scores table. GameControl.updateRound also uses it to identify the highest
+     * research level any player has achieved (which, of course, must equal the
+     * level of the highest-ranked player), which in turn determines the background
+     * image.
      */
     public int[] rankPlayers() {
 	int temp;
@@ -325,13 +340,13 @@ public class GameControl {
 	    index[2] = 3;
 	    index[3] = 2;
 	}
-	// Determine the top-ranked player
+	// Determine the top-ranked player ("best of the best")
 	if (maxPlayers(index[0], index[2]) == index[2]) {
 	    temp = index[0];
 	    index[0] = index[2];
 	    index[2] = temp;
 	}
-	// Determine the bottom-ranked player
+	// Determine the bottom-ranked player ("worst of the worst")
 	if (maxPlayers(index[1], index[3]) == index[3]) {
 	    temp = index[1];
 	    index[1] = index[3];
@@ -347,21 +362,28 @@ public class GameControl {
     }
 
     /*
-     * maxPlayers: as noted above, this method ranks two players based on their (1) research level or,
-     * in the case of a "tie", (2) accumulated research.  The higher-ranked of the two is returned.
+     * maxPlayers(): As noted above, this method ranks two players based on (1) their
+     * research level, (2) accumulated research, and then (3) accumulated money. The
+     * index corresponding to the higher-ranked of the two players is returned.
      */
     private int maxPlayers(int p1, int p2) {
 	int diff = players[p2].getModuleLevel() - players[p1].getModuleLevel();
-	if (diff > 0)
+	if (diff > 0) {
 	    return p2;
-	else if (diff < 0)
+	} else if (diff < 0) {
 	    return p1;
-	else {
-	    diff = players[p2].getResearch() - players[p1].getResearch();
-	    if (diff > 0)
-		return p2;
-	    else
-		return p1;
+	}
+	diff = players[p2].getResearch() - players[p1].getResearch();
+	if (diff > 0) {
+	    return p2;
+	} else if (diff < 0) {
+	    return p1;
+	}
+	diff = players[p2].getMoney() - players[p1].getMoney();
+	if (diff > 0) {
+	    return p2;
+	} else {
+	    return p1;
 	}
     }
 

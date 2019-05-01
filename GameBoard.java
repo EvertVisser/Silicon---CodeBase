@@ -47,6 +47,7 @@ public class GameBoard {
     private SiliconGame game;
     private Settings settingsScreen;
     private GridPane gpGame;
+    protected StackPane pane;
     private Pane cardPane;
     private Group cardGuideGroup;
     private Group group;
@@ -168,8 +169,7 @@ public class GameBoard {
 
     private StackPane setupBoard(BorderPane root) {
 
-	StackPane pane = new StackPane();
-
+	pane = new StackPane();
 	pane.setBackground(new Background(Monitor.getBackground(1)));
 
 	HBox hBox = new HBox(0);
@@ -177,15 +177,15 @@ public class GameBoard {
 	hBox.setMaxSize(972, 648);
 	hBox.setMinSize(972, 648);
 
-	// Create a TextArea for the current scores
-	VBox.setVgrow(createScoreDisplay(), Priority.ALWAYS);
-	SiliconGame.vbRight.getChildren().add(0, taScores);
-
 	// Create a TextArea to display a log of the game's events
 	taLog = new TextArea();
 	taLog.setWrapText(false);
 	taLog.setEditable(false);
 	VBox.setVgrow(taLog, Priority.ALWAYS);
+
+	// Create a TextArea for the current scores
+	VBox.setVgrow(createScoreDisplay(), Priority.ALWAYS);
+	SiliconGame.vbRight.getChildren().add(0, taScores);
 
 	// Create buttons for "Buy a card", "Buy research", "Attack a
 	// card" and "Save game".
