@@ -23,7 +23,6 @@ public class Player {
     private int money = 0;
     private int research = 0;
     private int moduleLevel = 0;
-    private String score;
     private ArrayList<Card> cards = new ArrayList<Card>();
 
     private String[] cardLoadData;
@@ -76,9 +75,12 @@ public class Player {
 	return cost;
     }
 
+    /*
+     * getScore: Called by GameBoard.getScore and GameBoard.drawScores methods to
+     * display the current score for each player.
+     */
     String getScore() {
-	score = " " + money + "      " + research + "         " + moduleLevel + " ";
-	return score;
+	return String.format("%10d%10d%10d\n", money, research, moduleLevel);
     }
 
     Color getColour() {

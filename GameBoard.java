@@ -181,8 +181,11 @@ public class GameBoard {
 	hBox.setMaxSize(972, 648);
 	hBox.setMinSize(972, 648);
 
-	// The text area will represent a log of the events
-	// taking place in the game.
+	// Create a TextArea for the current scores
+	VBox.setVgrow(createScoreDisplay(), Priority.ALWAYS);
+	SiliconGame.vbRight.getChildren().add(0, taScores);
+
+	// Create a TextArea to display a log of the game's events
 	taLog = new TextArea();
 	taLog.setWrapText(false);
 	taLog.setEditable(false);
@@ -213,13 +216,6 @@ public class GameBoard {
 	lResearch.setId("button-label");
 	Label lSave = new Label("Save Game");
 	lSave.setId("button-label");
-
-	// Create a GridPane for root.Left --> vbLeft and add the 4 x Game buttons (with
-	// their Labels) to it
-	gpGame = new GridPane();
-	gpGame.setId("grid-pane-nav-buttons");
-	gpGame.addColumn(0, buyCard, attackCard, buyResearch, saveButton);
-	gpGame.addColumn(1, lBuy, lAttack, lResearch, lSave);
 
 	// Specify the actions for each Game button (lambda definitions)
 	// *Buy a card*
@@ -270,6 +266,13 @@ public class GameBoard {
 	    new Thread(new Tone(262, 100)).start();
 	    gameControl.getGameState().saveGame();
 	});
+
+	// Create a GridPane and add the 4 x Game buttons (with their Labels) to it
+	// Add the GridPane to vbLeft
+	gpGame = new GridPane();
+	gpGame.setId("grid-pane-nav-buttons");
+	gpGame.addColumn(0, buyCard, attackCard, buyResearch, saveButton);
+	gpGame.addColumn(1, lBuy, lAttack, lResearch, lSave);
 	SiliconGame.vbLeft.getChildren().addAll(taLog, gpGame);
 
 	// The cardPane will represent the playing area
@@ -318,14 +321,6 @@ public class GameBoard {
 
 	// The rightPanel will hold the score display and some
 	// other buttons
-	VBox rightPanel = new VBox(10);
-	rightPanel.setAlignment(Pos.CENTER);
-	rightPanel.setMaxSize(162, 648);
-	rightPanel.setMinSize(162, 648);
-
-	rightPanel.getChildren().add(scoreDisplay());
-
-	hBox.getChildren().add(rightPanel);
 	pane.getChildren().add(hBox);
 
 	root.setCenter(pane);
@@ -360,48 +355,50 @@ public class GameBoard {
 	return pane;
     }
 
+    /*
+     * logDisplay: adds an event to the log TextArea. Importantly, the game
+     * maintains a separate ArrayList of events in GameControl.gameLog. Accordingly,
+     * GameControl.newLogEntry (which calls both gameLog.add and logDisplay) should
+     * be used in preference to accessing logDisplay directly.
+     */
     void logDisplay(String logEntry) {
-	// To be entered into the log area
 	taLog.appendText(logEntry + "\n");
     }
 
-    VBox scoreDisplay() {
+    /*
+     * createScoreDisplay: Create a TextArea to display each player's mega-bucks,
+     * accumulated research, and current research level.
+     */
+    private TextArea createScoreDisplay() {
 	taScores = new TextArea();
-	VBox.setVgrow(taScores, Priority.ALWAYS);
-	SiliconGame.vbRight.getChildren().add(0, taScores);
-
-	scores = new VBox(15);
-	scores.setAlignment(Pos.CENTER);
-	scores.setMaxWidth(155);
+	taScores.setWrapText(false);
+	taScores.setEditable(false);
 	Player[] players = gameControl.getPlayers();
-	playerScores = new Label[gameControl.getGameRules().getNumberOfPlayers()];
-	playerNames = new Label[gameControl.getGameRules().getNumberOfPlayers()];
-
-	round = new Label("Round: " + gameControl.getGameState().getGameRound());
-	scores.getChildren().add(round);
-
+	taScores.setText("  ***   CURRENT SCORES   ***\n");
+	taScores.appendText("Round: " + gameControl.getGameState().getGameRound() + "\n");
+	taScores.appendText(String.format("%-10s%10s%10s%10s\n", "Player", "MB", "Research", "Level"));
+	taScores.appendText(String.format("%-10s%10s%10s%10s\n", "------", "--", "--------", "-----"));
 	for (int i = 0; i < gameControl.getGameRules().getNumberOfPlayers(); i++) {
-	    playerNames[i] = new Label(players[i].getName());
-	    playerNames[i].setStyle("-fx-border-color: gray; -fx-border-width: 5");
-	    playerNames[i].setBackground(
-		    new Background(new BackgroundFill(players[i].getColour(), CornerRadii.EMPTY, Insets.EMPTY)));
-	    scores.getChildren().add(playerNames[i]);
-
-	    Label titles = new Label("Gold Research Lvl");
-	    scores.getChildren().add(titles);
-	    playerScores[i] = new Label(players[i].getScore());
-	    scores.getChildren().add(playerScores[i]);
+	    taScores.appendText(String.format("%-10s", players[i].getName()));
+	    taScores.appendText(players[i].getScore());
 	}
-	return scores;
+	return taScores;
     }
 
-    void drawScores() {
-	round.setText("Round: " + gameControl.getGameState().getGameRound());
+    /*
+     * displayScores: Use the Scores TextArea to display each player's current
+     * mega-bucks, accumulated research, and research level.
+     */
+    void displayScores() {
 	Player[] players = gameControl.getPlayers();
+	taScores.setText("  ***   CURRENT SCORES   ***\n");
+	taScores.appendText("Round: " + gameControl.getGameState().getGameRound() + "\n");
+	taScores.appendText(String.format("%-10s%10s%10s%10s\n", "Player", "MB", "Research", "Level"));
+	taScores.appendText(String.format("%-10s%10s%10s%10s\n", "------", "--", "--------", "-----"));
 	for (int i = 0; i < gameControl.getGameRules().getNumberOfPlayers(); i++) {
-	    playerScores[i].setText(players[i].getScore());
+	    taScores.appendText(String.format("%-10s", players[i].getName()));
+	    taScores.appendText(players[i].getScore());
 	}
-
     }
 
     void placeDeck() {
@@ -861,7 +858,7 @@ public class GameBoard {
     }
 
     void gameOver() {
-	drawScores();
+	displayScores();
 	gameControl.newLogEntry("Game won in " + gameControl.getGameState().getGameRound() + " rounds.");
 	buyCard.setDisable(true);
 	attackCard.setDisable(true);

@@ -124,7 +124,7 @@ public class GameControl {
     }
 
     void resumeGame() {
-	gameBoard.drawScores();
+	gameBoard.displayScores();
 	for (Player player : players) {
 	    gameBoard.cardOutlines(player);
 	}
@@ -154,8 +154,8 @@ public class GameControl {
 	}
 
 	newLogEntry("  ***  Silicon - game commencing  ***  ");
-	gameBoard.drawScores();
-	newLogEntry("Player 1 choose an option.");
+	gameBoard.displayScores();
+	newLogEntry("Player 1, please choose an option ...");
 	// No need to test for the attack button option at the start of the game
 	return;
     }
@@ -202,7 +202,7 @@ public class GameControl {
 	    gameBoard.cardOutlines(players[playerTurn]);
 	    nextPlayer();
 	    giveEarnings();
-	    gameBoard.drawScores();
+	    gameBoard.displayScores();
 
 	    // Check if the current player is able to make a move
 	    // must have more than 10 gold to buy a card
@@ -214,7 +214,7 @@ public class GameControl {
 		newLogEntry(players[playerTurn].getName() + " cannot make a" + " move - action moves to next player.");
 		nextPlayer();
 		giveEarnings();
-		gameBoard.drawScores();
+		gameBoard.displayScores();
 	    }
 
 	    if (players[playerTurn].getHuman()) {
@@ -247,7 +247,7 @@ public class GameControl {
 	gameState.nextRound();
 	nextPlayer();
 	giveEarnings();
-	gameBoard.drawScores();
+	gameBoard.displayScores();
 
 	// Check if the current player is able to make a move
 	// must have more than 10 gold to buy a card
@@ -259,7 +259,7 @@ public class GameControl {
 	    newLogEntry(players[playerTurn].getName() + " cannot make a" + " move - action moves to next player.");
 	    nextPlayer();
 	    giveEarnings();
-	    gameBoard.drawScores();
+	    gameBoard.displayScores();
 	}
 
 	newLogEntry(players[playerTurn].getName() + " choose an option.");
