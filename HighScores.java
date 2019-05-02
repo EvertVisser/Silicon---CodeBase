@@ -16,16 +16,29 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 public class HighScores {
-    public static TextArea createHighScoresScreen() {
-	TextArea showHighScores = new TextArea();
-	showHighScores.getStyleClass().add("TextArea");
-	showHighScores.setMinWidth(Monitor.defaultWidth / 4);
-	showHighScores.setMaxWidth(Monitor.defaultWidth / 4);
-	showHighScores.setMinHeight(Monitor.defaultHeight / 2);
-	showHighScores.setMaxHeight(Monitor.defaultHeight / 2);
+    public static VBox createHighScoresScreen() {
+	// Create the header for the High Scores table
+	Text tHighScores = new Text("High Scores Table");
+	tHighScores.setId("text-flow-header");
+	TextFlow tfHighScores = new TextFlow(tHighScores);
+	tfHighScores.getStyleClass().add("text-flow");
+	tfHighScores.setMinWidth(Monitor.defaultWidth / 4);
+	tfHighScores.setMaxWidth(Monitor.defaultWidth / 4);
+	
+	// Create the TextArea for the High Scores table
+	TextArea taHighScores = new TextArea();
+	taHighScores.getStyleClass().add("TextArea");
+	taHighScores.setMinWidth(Monitor.defaultWidth / 4);
+	taHighScores.setMaxWidth(Monitor.defaultWidth / 4);
+	taHighScores.setMinHeight(Monitor.defaultHeight / 2);
+	taHighScores.setMaxHeight(Monitor.defaultHeight / 2);
 
+	// Populate the High Scores table from the file
 	String highScoresTable = "";
 	try {
 	    InputStream inFile = ClassLoader.getSystemResourceAsStream("high_scores.txt");
@@ -35,12 +48,16 @@ public class HighScores {
 
 	    String[] highScoresLine = highScoresTable.split(",");
 	    for (int i = 0; i < 5; i++) {
-		showHighScores
-			.appendText(String.format("%-16s %8s\n", highScoresLine[i * 3], highScoresLine[i * 3 + 2]));
+		taHighScores
+			.appendText(String.format("%-16s%24s\n", highScoresLine[i * 3], highScoresLine[i * 3 + 2]));
 	    }
 	} catch (Exception e) {
 	    System.out.println("HighScores Class (lines 31-38): Unable to load 'high_scores.txt' - file error.");
 	}
+
+	// Create a VBox to hold the header and High Scores table
+	VBox showHighScores = new VBox(tfHighScores, taHighScores);
+	showHighScores.setId("VBox-invis");
 	return showHighScores;
     }
 }

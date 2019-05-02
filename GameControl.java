@@ -26,7 +26,7 @@ public class GameControl {
     private Stage stage;
     private GameState gameState;
     private GameRules gameRules;
-    private GameBoard gameBoard;
+    GameBoard gameBoard = null;
     private Player[] players;
     private int playerTurn;
     private ArrayList<Card> playerCards;
@@ -154,7 +154,7 @@ public class GameControl {
 	    gameState.movePointer();
 	}
 
-	newLogEntry("  ***  Silicon - game commencing  ***  ");
+	newLogEntry("  ***  Silicon - game commencing  ***");
 	gameBoard.displayScores();
 	newLogEntry("Player 1, please choose an option ...");
 	// No need to test for the attack button option at the start of the game
@@ -367,18 +367,24 @@ public class GameControl {
      * index corresponding to the higher-ranked of the two players is returned.
      */
     private int maxPlayers(int p1, int p2) {
+	// Does one player have a higher research level than the other?
 	int diff = players[p2].getModuleLevel() - players[p1].getModuleLevel();
 	if (diff > 0) {
 	    return p2;
 	} else if (diff < 0) {
 	    return p1;
 	}
+	
+	// No: Does one player have more accumulated research than the other?
 	diff = players[p2].getResearch() - players[p1].getResearch();
 	if (diff > 0) {
 	    return p2;
 	} else if (diff < 0) {
 	    return p1;
 	}
+
+	// No: Does one player have more money than the other?
+	// If there's still a tie, return the index for player 1
 	diff = players[p2].getMoney() - players[p1].getMoney();
 	if (diff > 0) {
 	    return p2;

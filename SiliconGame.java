@@ -38,10 +38,11 @@ public class SiliconGame extends Application {
     private Stage stage;
     private Scene scene;
     public BorderPane root;
-    static protected VBox vbLeft;
-    static protected VBox vbRight;
+    protected VBox vbLeft;
+    protected VBox vbRight;
     private Button return2main;
     private static GameControl gameControl;
+    protected GameBoard gameBoard;
     private Monitor monitor;
     private Settings settings;
 
@@ -50,7 +51,7 @@ public class SiliconGame extends Application {
     protected StackPane startGame = null;
     protected StackPane loadGame = null;
     protected GridPane showSettings = null;
-    protected TextArea showHighScores = null;
+    protected VBox showHighScores = null;
     protected ImageView showCredits = null;
     protected TextArea showHelp = null;
 
@@ -133,6 +134,11 @@ public class SiliconGame extends Application {
 	    root.setCenter(showMainMenu);
 	    return2main.setVisible(false);
 	    vbLeft.setVisible(false);
+	    // If vbRight has more than one child then there must be a Current Scores table
+	    if (vbRight.getChildren().size() > 1) {
+		gameBoard.tfScores.setVisible(false);
+		gameBoard.taScores.setVisible(false);
+	    }
 	});
 
 	// Create a Label for each navigation button
@@ -259,10 +265,14 @@ public class SiliconGame extends Application {
 	newGame.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
 	    return2main.setVisible(true);
+	    // If there was a previous game then clear the left and right sections of root
+	    if (!vbLeft.getChildren().isEmpty()) {
+		vbLeft.getChildren().clear();
+		vbRight.getChildren().remove(0);
+	    }
 	    gameLoaded = false;
 	    loadMessage.setText("");
-	    @SuppressWarnings("unused")
-	    GameBoard gameBoard = new GameBoard(game, root, gameControl, gameLoaded);
+	    gameBoard = new GameBoard(game, root, gameControl, gameLoaded);
 	});
 
 	// *Load Game*

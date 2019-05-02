@@ -26,6 +26,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 //GRP-COSC2635 2D
 //
@@ -47,7 +49,7 @@ public class GameBoard {
     private SiliconGame game;
     private Settings settingsScreen;
     private GridPane gpGame;
-    protected StackPane pane;
+    protected StackPane pane = null;
     private Pane cardPane;
     private Group cardGuideGroup;
     private Group group;
@@ -75,8 +77,10 @@ public class GameBoard {
     private Button buyCard;
     private Button attackCard;
     private Button buyResearch;
-    private TextArea taLog = null;
-    private TextArea taScores = null;
+    private TextFlow tfLog;
+    private TextArea taLog;
+    TextFlow tfScores;
+    TextArea taScores;
     private Button saveButton;
     private Button settings;
     private Button returnButton;
@@ -168,7 +172,6 @@ public class GameBoard {
     }
 
     private StackPane setupBoard(BorderPane root) {
-
 	pane = new StackPane();
 	pane.setBackground(new Background(Monitor.getBackground(1)));
 
@@ -178,14 +181,24 @@ public class GameBoard {
 	hBox.setMinSize(972, 648);
 
 	// Create a TextArea to display a log of the game's events
+	Text tLog = new Text("Game Log");
+	tLog.setId("text-flow-header");
+	tfLog = new TextFlow(tLog);
+	tfLog.getStyleClass().add("text-flow");
+
 	taLog = new TextArea();
 	taLog.setWrapText(false);
 	taLog.setEditable(false);
 	VBox.setVgrow(taLog, Priority.ALWAYS);
 
 	// Create a TextArea for the current scores
+	Text tScores = new Text("Current Scores");
+	tScores.setId("text-flow-header");
+	tfScores = new TextFlow(tScores);
+	tfScores.getStyleClass().add("text-flow");
 	VBox.setVgrow(createScoreDisplay(), Priority.ALWAYS);
-	SiliconGame.vbRight.getChildren().add(0, taScores);
+	game.vbRight.getChildren().add(0, taScores);
+	game.vbRight.getChildren().add(0, tfScores);
 
 	// Create buttons for "Buy a card", "Buy research", "Attack a
 	// card" and "Save game".
@@ -266,10 +279,13 @@ public class GameBoard {
 	// Create a GridPane and add the 4 x Game buttons (with their Labels) to it
 	// Add the GridPane to vbLeft
 	gpGame = new GridPane();
-	gpGame.setId("grid-pane-nav-buttons");
+	gpGame.setId("grid-pane-game-buttons");
 	gpGame.addColumn(0, buyCard, attackCard, buyResearch, saveButton);
 	gpGame.addColumn(1, lBuy, lAttack, lResearch, lSave);
-	SiliconGame.vbLeft.getChildren().addAll(taLog, gpGame);
+	game.vbLeft.getChildren().addAll(tfLog, taLog, gpGame);
+	game.vbLeft.setVisible(true);
+	tfScores.setVisible(true);
+	taScores.setVisible(true);
 
 	// The cardPane will represent the playing area
 	cardPane = new Pane();
@@ -370,8 +386,7 @@ public class GameBoard {
 	taScores.setWrapText(false);
 	taScores.setEditable(false);
 	Player[] players = gameControl.getPlayers();
-	taScores.setText("  ***   CURRENT SCORES   ***\n");
-	taScores.appendText("Round: " + gameControl.getGameState().getGameRound() + "\n");
+	taScores.setText("Round: " + gameControl.getGameState().getGameRound() + "\n");
 	taScores.appendText(String.format("%-10s%13s%10s%7s\n", "Player", "MB", "Research", "Level"));
 	taScores.appendText(String.format("%-10s%13s%10s%7s\n", "------", "--", "--------", "-----"));
 	for (int i = 0; i < gameControl.getGameRules().getNumberOfPlayers(); i++) {
@@ -388,8 +403,7 @@ public class GameBoard {
     void displayScores() {
 	Player[] players = gameControl.getPlayers();
 	int[] index = gameControl.rankPlayers();
-	taScores.setText("  ***   CURRENT SCORES   ***\n");
-	taScores.appendText("Round: " + gameControl.getGameState().getGameRound() + "\n");
+	taScores.setText("Round: " + gameControl.getGameState().getGameRound() + "\n");
 	taScores.appendText(String.format("%-10s%13s%10s%7s\n", "Player", "MB", "Research", "Level"));
 	taScores.appendText(String.format("%-10s%13s%10s%7s\n", "------", "--", "--------", "-----"));
 	for (int i = 0; i < gameControl.getGameRules().getNumberOfPlayers(); i++) {

@@ -41,7 +41,7 @@ public class Monitor {
     public Monitor(Stage primaryStage) {
 	stage = primaryStage;
 	fullWidth = Screen.getPrimary().getVisualBounds().getWidth();
-	fullHeight = Screen.getPrimary().getVisualBounds().getHeight();
+	fullHeight = Screen.getPrimary().getVisualBounds().getHeight()+30;
 
 	defaultWidth = fullWidth * 0.75;
 	defaultHeight = fullHeight * 0.75;
