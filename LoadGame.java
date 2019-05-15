@@ -41,17 +41,16 @@ public class LoadGame {
 	loadData = "";
 
 	try {
-	    File file = new File("data/save_game.txt");
-	    Scanner scanner = new Scanner(file);
+	    File inFile = new File("save_game.txt");
+	    Scanner scanner = new Scanner(inFile);
 	    loadData = scanner.nextLine();
-
 	    scanner.close();
 
 	} catch (Exception ex) {
-	    loadStatus = "File error: check folder";
+	    loadStatus = "LoadGame Class (lines 44-47): Unable to load 'save_game.txt' - file error.";
+	    System.out.println(loadStatus);
 	    return loadStatus;
 	}
-
 	return loadStatus;
     }
 
@@ -59,9 +58,9 @@ public class LoadGame {
 	loadData = "";
     }
 
-    void createGame(SiliconGame game, BorderPane root, GameControl gameControl) {
+    GameBoard createGame(SiliconGame game, BorderPane root, GameControl gameControl) {
 	if (loadData.equals(""))
-	    return;
+	    return null;
 
 	this.game = game;
 	@SuppressWarnings("unused")
@@ -121,8 +120,8 @@ public class LoadGame {
 
 	gameControl.setGameLog(gameLog);
 
-	@SuppressWarnings("unused")
 	GameBoard gameBoard = new GameBoard(game, root, gameControl, this);
+	return gameBoard;
     }
 
     int getPlayerTurn() {

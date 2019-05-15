@@ -74,13 +74,13 @@ public class GameBoard {
     private double cardVertYOffset = 18.0;
     private double cardLayoutMargin = 5.0;
 
-    private Button buyCard;
+    private Button buyCard = null;
     private Button attackCard;
     private Button buyResearch;
     private TextFlow tfLog;
-    private TextArea taLog;
+    private TextArea taLog = null;
     TextFlow tfScores;
-    TextArea taScores;
+    TextArea taScores = null;
     private Button saveButton;
     private Button settings;
     private Button returnButton;
@@ -151,7 +151,7 @@ public class GameBoard {
 	deck = gameControl.getGameState().getDeck();
 	mainDeckXCoord = gameControl.getGameRules().getMainDeckX();
 	mainDeckYCoord = gameControl.getGameRules().getMainDeckY();
-	this.root.setTop(setupBoard(this.root));
+	this.root.setCenter(setupBoard(this.root));
 	if (settingsScreen.getFullScreen()) {
 	    settingsScreen.setFullScreen(false);
 	    settingsScreen.changeScreen();
@@ -190,8 +190,8 @@ public class GameBoard {
 	taLog.setWrapText(false);
 	taLog.setEditable(false);
 	VBox.setVgrow(taLog, Priority.ALWAYS);
-
-	// Create a TextArea for the current scores
+	
+// Create a TextArea for the current scores
 	Text tScores = new Text("Current Scores");
 	tScores.setId("text-flow-header");
 	tfScores = new TextFlow(tScores);

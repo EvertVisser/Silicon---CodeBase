@@ -1,5 +1,6 @@
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -41,6 +43,7 @@ public class SiliconGame extends Application {
     protected VBox vbLeft;
     protected VBox vbRight;
     private Button return2main;
+    private Button return2game;
     private static GameControl gameControl;
     protected GameBoard gameBoard;
     private Monitor monitor;
@@ -50,12 +53,12 @@ public class SiliconGame extends Application {
     protected VBox showMainMenu = null;
     protected StackPane startGame = null;
     protected StackPane loadGame = null;
-    protected GridPane showSettings = null;
+    protected VBox showSettings = null;
     protected VBox showHighScores = null;
     protected ImageView showCredits = null;
     protected TextArea showHelp = null;
 
-//    private LoadGame loader = new LoadGame();
+    private LoadGame loader = new LoadGame();
     private boolean gameLoaded;
     private Label loadMessage = new Label();
 
@@ -127,7 +130,6 @@ public class SiliconGame extends Application {
 	return2main = new Button("Return to Main Menu");
 	return2main.setTooltip(new Tooltip("Press this button to return to the Main Menu"));
 	return2main.setVisible(false);
-	BorderPane.setAlignment(return2main, Pos.BOTTOM_CENTER);
 
 	return2main.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
@@ -138,8 +140,40 @@ public class SiliconGame extends Application {
 	    if (vbRight.getChildren().size() > 1) {
 		gameBoard.tfScores.setVisible(false);
 		gameBoard.taScores.setVisible(false);
+		return2game.setVisible(true);
 	    }
 	});
+
+	// Create the "Return to Game" button
+	return2game = new Button("Return to Game");
+	return2game.setTooltip(new Tooltip("Press this button to return to the Game Board"));
+	return2game.setVisible(false);
+
+	return2game.setOnAction(e -> {
+	    new Thread(new Tone(262, 100)).start();
+	    root.setCenter(gameBoard.pane);
+	    return2main.setVisible(true);
+	    return2game.setVisible(false);
+	    vbLeft.setVisible(true);
+	    // If vbRight has more than one child then there must be a Current Scores table
+	    if (vbRight.getChildren().size() > 1) {
+		gameBoard.tfScores.setVisible(true);
+		gameBoard.taScores.setVisible(true);
+	    }
+	});
+
+	GridPane gpReturn = new GridPane();
+	gpReturn.setPrefWidth(Monitor.fullWidth);
+//	gpReturn.setGridLinesVisible(true);
+	gpReturn.setId("grid-pane-return-buttons");
+	gpReturn.add(return2game, 0, 0);
+	VBox vbNull = new VBox();
+	GridPane.setHgrow(vbNull, Priority.ALWAYS);
+	gpReturn.add(vbNull, 1, 0);
+	gpReturn.add(return2main, 2, 0);
+	GridPane.setHalignment(return2main, HPos.RIGHT);
+	GridPane.setHalignment(return2game, HPos.LEFT);
+	BorderPane.setAlignment(gpReturn, Pos.CENTER);
 
 	// Create a Label for each navigation button
 	Label lSettings = new Label("Show Settings");
@@ -192,11 +226,14 @@ public class SiliconGame extends Application {
 	bSettings.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
 	    if (showSettings == null) {
-		showSettings = Settings.createSettingsScreen(stage, root);
+		showSettings = settings.createSettingsScreen(stage, root);
 	    }
 	    BorderPane.setAlignment(showSettings, Pos.CENTER);
 	    root.setCenter(showSettings);
 	    return2main.setVisible(true);
+	    if (vbRight.getChildren().size() > 1) {
+		return2game.setVisible(true);
+	    }
 	});
 
 	// *High Scores*
@@ -208,6 +245,9 @@ public class SiliconGame extends Application {
 	    BorderPane.setAlignment(showHighScores, Pos.CENTER);
 	    root.setCenter(showHighScores);
 	    return2main.setVisible(true);
+	    if (vbRight.getChildren().size() > 1) {
+		return2game.setVisible(true);
+	    }
 	});
 
 	// *Credits*
@@ -219,6 +259,9 @@ public class SiliconGame extends Application {
 	    BorderPane.setAlignment(showCredits, Pos.CENTER);
 	    root.setCenter(showCredits);
 	    return2main.setVisible(true);
+	    if (vbRight.getChildren().size() > 1) {
+		return2game.setVisible(true);
+	    }
 	});
 
 	// *Help*
@@ -230,6 +273,9 @@ public class SiliconGame extends Application {
 	    BorderPane.setAlignment(showHelp, Pos.CENTER);
 	    root.setCenter(showHelp);
 	    return2main.setVisible(true);
+	    if (vbRight.getChildren().size() > 1) {
+		return2game.setVisible(true);
+	    }
 	});
 
 	// Add everything to root (NB: Center and the VBoxes are free for other screens
@@ -243,7 +289,7 @@ public class SiliconGame extends Application {
 	root.setTop(vbLogo);
 	root.setLeft(vbLeft);
 	root.setRight(vbRight);
-	root.setBottom(return2main);
+	root.setBottom(gpReturn);
 	return root;
     }
 
@@ -269,6 +315,7 @@ public class SiliconGame extends Application {
 	    if (!vbLeft.getChildren().isEmpty()) {
 		vbLeft.getChildren().clear();
 		vbRight.getChildren().remove(0);
+		vbRight.getChildren().remove(0);
 	    }
 	    gameLoaded = false;
 	    loadMessage.setText("");
@@ -279,9 +326,15 @@ public class SiliconGame extends Application {
 	loadGame.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
 	    return2main.setVisible(true);
-//	    loader.resetData();
-//	    loadMessage.setText(loader.loadData());
-//	    loader.createGame(game, stage, gameControl);
+	    // If there was a previous game then clear the left and right sections of root
+	    if (!vbLeft.getChildren().isEmpty()) {
+		vbLeft.getChildren().clear();
+		vbRight.getChildren().remove(0);
+		vbRight.getChildren().remove(0);
+	    }
+	    loader.resetData();
+	    loadMessage.setText(loader.loadData());
+	    gameBoard = loader.createGame(game, root, gameControl);
 	});
 
 	// *Exit*

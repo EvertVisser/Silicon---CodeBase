@@ -78,7 +78,7 @@ public class GameState {
     void saveGame() {
 	String output = toString();
 	try {
-	    File outFile = new File("bin/data/save_game.txt");
+	    File outFile = new File("save_game.txt");
 	    PrintWriter printWriter = new PrintWriter(outFile);
 	    printWriter.println(output);
 	    printWriter.close();
