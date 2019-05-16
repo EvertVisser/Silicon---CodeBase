@@ -55,8 +55,8 @@ public class Settings {
     // Create the Settings Screen
     public VBox createSettingsScreen(Stage primaryStage, BorderPane root) {
 	VBox settingsScreen = new VBox(20);
-	settingsScreen.setAlignment(Pos.CENTER);
-	settingsScreen.setTranslateY(50.0);
+	settingsScreen.getStyleClass().add("VBox");
+//	settingsScreen.setAlignment(Pos.CENTER);
 	settingsScreen.setMinSize(420, 480);
 	settingsScreen.setMaxSize(420, 480);
 
@@ -163,7 +163,7 @@ public class Settings {
 	try {
 	    media = new Media(this.getClass().getResource(this.track).toString());
 	} catch (Exception e) {
-	    System.out.println("Settings Class (line 216) - Could not load '" + track + "' - check file system.");
+	    System.out.println("Settings Class (line 165) - Could not load '" + track + "' - check file system.");
 	}
 	mediaPlayer = new MediaPlayer(media);
 	mediaPlayer.play();
