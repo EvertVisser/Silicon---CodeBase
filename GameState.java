@@ -86,7 +86,7 @@ public class GameState {
 	    printWriter.close();
 	    gameControl.newLogEntry("Game saved to file.");
 	} catch (Exception ex) {
-	    gameControl.newLogEntry("GameState Class (lines 81-85): File write error - unable to save game to file.");
+	    gameControl.newLogEntry("GameState Class (lines 83-87): File write error - unable to save game to file.");
 	}
     }
 
@@ -114,7 +114,7 @@ public class GameState {
 	try {
 	    players[playerNumber] = player;
 	} catch (Exception ex) {
-	    System.out.println("GameState Class (line 114): Array error - unable to add player to the game.");
+	    System.out.println("GameState Class (line 115): Array error - unable to add player to the game.");
 	}
     }
 

@@ -45,7 +45,6 @@ public class GameControl {
 	gameOver = false;
 	gameLog = new ArrayList<String>();
 	attack = null;
-
     }
 
     void newGame() {

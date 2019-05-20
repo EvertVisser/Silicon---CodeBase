@@ -46,7 +46,7 @@ public class SiliconGame extends Application {
     protected VBox vbRight;
     private Button return2main;
     private Button return2game;
-    private static GameControl gameControl;
+    protected GameControl gameControl;
     protected GameBoard gameBoard;
     private Monitor monitor;
     private Settings settings;
@@ -85,8 +85,6 @@ public class SiliconGame extends Application {
 	stage.setAlwaysOnTop(true);
 	stage.setResizable(false);
 	stage.centerOnScreen();
-
-	gameControl = new GameControl(this, stage);
 
 	// Create the Scene and Root, then import the JavaFX CSS Stylesheet into Scene.
 	// Root provides a standard backdrop for every screen, with a background, logo
@@ -313,12 +311,14 @@ public class SiliconGame extends Application {
 	newGame.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
 	    return2main.setVisible(true);
+	    return2game.setVisible(false);
 	    // If there was a previous game then clear the left and right sections of root
 	    if (!vbLeft.getChildren().isEmpty()) {
 		vbLeft.getChildren().clear();
 		vbRight.getChildren().remove(0);
 		vbRight.getChildren().remove(0);
 	    }
+	    gameControl = new GameControl(this, stage);
 	    gameLoaded = false;
 	    loadMessage.setText("");
 	    gameBoard = new GameBoard(game, root, gameControl, gameLoaded);
@@ -328,12 +328,14 @@ public class SiliconGame extends Application {
 	loadGame.setOnAction(e -> {
 	    new Thread(new Tone(262, 100)).start();
 	    return2main.setVisible(true);
+	    return2game.setVisible(false);
 	    // If there was a previous game then clear the left and right sections of root
 	    if (!vbLeft.getChildren().isEmpty()) {
 		vbLeft.getChildren().clear();
 		vbRight.getChildren().remove(0);
 		vbRight.getChildren().remove(0);
 	    }
+	    gameControl = new GameControl(this, stage);
 	    loader.resetData();
 	    loadMessage.setText(loader.loadData());
 	    gameBoard = loader.createGame(game, root, gameControl);
