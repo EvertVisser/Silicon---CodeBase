@@ -29,21 +29,23 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-//GRP-COSC2635 2D
-//
-//SILICON - A JavaFX GAME BY:
-//Clark Lavery (mentor)
-//Evert Visser (s3727884)
-//Duncan Baxter (s3737140)
-//Kira Macarthur (s3742864)
-//Dao Kun Nie (s3691571)
-//Michael Power (s3162668)
-//John Zealand-Doyle (s3319550)
-//
-// The GameBoard class represents the main game area. It is
-// initiated when the user requests to play a new game. The data for
-// this scene is encapsulated in order to limit complication with
-// coding in the SiliconGame class
+/*
+ * GRP-COSC2635 2D
+ * (a.k.a. ERROR 404: TEAM NAME NOT FOUND)
+ * SiLiCON - A JavaFX game by:
+ * - Clark Lavery (mentor)
+ * - Evert Visser (s3727884)
+ * - Duncan Baxter (s3737140)
+ * - Kira Macarthur (s3742864)
+ * - Dao Kun Nie (s3691571)
+ * - John Zealand-Doyle (s3319550)
+ * - ex-team member Michael Power (s3162668)
+ * 
+ * The GameBoard class represents the main game area. It is
+ * initiated when the user requests to play a new game. The data for
+ * this scene is encapsulated in order to limit complications with
+ * coding in the SiliconGame class
+ */
 
 public class GameBoard {
     private SiliconGame game;
@@ -92,7 +94,7 @@ public class GameBoard {
     // Keyboard commands available to use from the gameboard:
     // shift B to buy a card
     // shift A to attack another player's card
-    // shift R to convert gold to research
+    // shift R to convert mega-bucks to research
     // shift S to save the game
     // shift F to toggle full screen/windowed mode
     // shift M to play the music track

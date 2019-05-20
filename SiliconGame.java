@@ -21,20 +21,22 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-// GRP-COSC2635 2D
-//
-// SILICON - A JavaFX GAME BY:
-// Clark Lavery (mentor)
-// Evert Visser (s3727884)
-// Duncan Baxter (s3737140)
-// Kira Macarthur (s3742864)
-// Dao Kun Nie (s3691571)
-// Michael Power (s3162668)
-// John Zealand-Doyle (s3319550)
-//
-// SiliconGame is the main class of the game that extends from the
-// Application class. It includes the GameControl object that
-// manages the flow of the game.
+/*
+ * GRP-COSC2635 2D
+ * (a.k.a. ERROR 404: TEAM NAME NOT FOUND)
+ * SiLiCON - A JavaFX game by:
+ * - Clark Lavery (mentor)
+ * - Evert Visser (s3727884)
+ * - Duncan Baxter (s3737140)
+ * - Kira Macarthur (s3742864)
+ * - Dao Kun Nie (s3691571)
+ * - John Zealand-Doyle (s3319550)
+ * - ex-team member Michael Power (s3162668)
+ * 
+ * SiliconGame is the main class of the game that extends from the
+ * Application class. It includes the GameControl object that
+ * manages the flow of the game.
+ */
 
 public class SiliconGame extends Application {
     private Stage stage;

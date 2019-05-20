@@ -1,14 +1,23 @@
 
 /*
- * SILICON - A JavaFX GAME BY:
+ * GRP-COSC2635 2D
+ * (a.k.a. ERROR 404: TEAM NAME NOT FOUND)
+ * SiLiCON - A JavaFX game by:
  * - Clark Lavery (mentor)
  * - Evert Visser (s3727884)
  * - Duncan Baxter (s3737140)
  * - Kira Macarthur (s3742864)
  * - Dao Kun Nie (s3691571)
- * - Michael Power (s3162668)
  * - John Zealand-Doyle (s3319550)
+ * - ex-team member Michael Power (s3162668)
  * 
+ * This was to be the code for a new thread that would create the slider controls
+ * for the media player in MiNiSYNTH.  However, it turned out to be easier to use 
+ * a lambda function for the new runnable (refer to the first line of the 
+ * createMP3player() method in Sound.java (part of the MiNiSYNTH source-files).
+ * This class ended up merely providing "convenience" constructors for associated 
+ * Media, MediaPlayer and MediaView objects.
+ *
  * Duncan can answer queries in relation to this Class.
  */
 
@@ -38,12 +47,6 @@ public class Tune implements Runnable {
     }
 
     /*
-     * This is the code for a new thread that creates a Slider for duration control.
-     * Media, MediaPlayer and MediaView are asynchronous, so we must wait for the
-     * READY signal. Called (from Sound class) using "loaded.mp.setOnReady(loaded);"
-     * where "loaded" is the identifier of a Tune, so "loaded.mp" refers to its
-     * MediaPlayer.
-     * 
      * @see java.lang.Runnable#run()
      */
     public void run() {

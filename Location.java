@@ -1,17 +1,20 @@
 
-// GRP-COSC2635 2D
-//
-// SILICON - A JavaFX GAME BY:
-// Clark Lavery (mentor)
-// Evert Visser (s3727884)
-// Duncan Baxter (s3737140)
-// Kira Macarthur (s3742864)
-// Dao Kun Nie (s3691571)
-// Michael Power (s3162668)
-// John Zealand-Doyle (s3319550)
-//
-// Location class used to represent the location of
-// a card on the card table.
+/*
+ * GRP-COSC2635 2D
+ * (a.k.a. ERROR 404: TEAM NAME NOT FOUND)
+ * SiLiCON - A JavaFX game by:
+ * - Clark Lavery (mentor)
+ * - Evert Visser (s3727884)
+ * - Duncan Baxter (s3737140)
+ * - Kira Macarthur (s3742864)
+ * - Dao Kun Nie (s3691571)
+ * - John Zealand-Doyle (s3319550)
+ * - ex-team member Michael Power (s3162668)
+ * 
+ * Location class used to represent the location of
+ * a card on the card table.
+ */
+
 public class Location {
     private int xCoord = 500;
     private int yCoord = 380;

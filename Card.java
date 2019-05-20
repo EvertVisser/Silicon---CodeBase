@@ -1,20 +1,23 @@
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-//GRP-COSC2635 2D
-//
-//SILICON - A JavaFX GAME BY:
-//Clark Lavery (mentor)
-//Evert Visser (s3727884)
-//Duncan Baxter (s3737140)
-//Kira Macarthur (s3742864)
-//Dao Kun Nie (s3691571)
-//Michael Power (s3162668)
-//John Zealand-Doyle (s3319550)
-//
-// Card class used to represent the details of a
-// a card such as name and revenue. Also holds a
-// location value in relation to the card table.
+/*
+ * GRP-COSC2635 2D
+ * (a.k.a. ERROR 404: TEAM NAME NOT FOUND)
+ * SiLiCON - A JavaFX game by:
+ * - Clark Lavery (mentor)
+ * - Evert Visser (s3727884)
+ * - Duncan Baxter (s3737140)
+ * - Kira Macarthur (s3742864)
+ * - Dao Kun Nie (s3691571)
+ * - John Zealand-Doyle (s3319550)
+ * - ex-team member Michael Power (s3162668)
+ * 
+ * Card class used to represent the details of a
+ * a card such as name and revenue. Also holds a
+ * location value in relation to the card table.
+ */
+
 public class Card {
     private String name;
     private int revenue = 0;

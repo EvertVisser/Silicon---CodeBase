@@ -4,20 +4,22 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.stage.Stage;
 
-//GRP-COSC2635 2D
-//
-//SILICON - A JavaFX GAME BY:
-//Clark Lavery (mentor)
-//Evert Visser (s3727884)
-//Duncan Baxter (s3737140)
-//Kira Macarthur (s3742864)
-//Dao Kun Nie (s3691571)
-//Michael Power (s3162668)
-//John Zealand-Doyle (s3319550)
-//
-// The GameControl class acts as a bridge between the data of the card
-// game and the various display functions. It manages the flow of
-// activity during the game.
+/*
+ * GRP-COSC2635 2D
+ * (a.k.a. ERROR 404: TEAM NAME NOT FOUND)
+ * SiLiCON - A JavaFX game by:
+ * - Clark Lavery (mentor)
+ * - Evert Visser (s3727884)
+ * - Duncan Baxter (s3737140)
+ * - Kira Macarthur (s3742864)
+ * - Dao Kun Nie (s3691571)
+ * - John Zealand-Doyle (s3319550)
+ * - ex-team member Michael Power (s3162668)
+ * 
+ * The GameControl class acts as a bridge between the data of the card
+ * game and the various display functions. It manages the flow of
+ * activity during the game.
+ */
 
 public class GameControl {
     @SuppressWarnings("unused")
@@ -168,7 +170,7 @@ public class GameControl {
 	    player.setMoney(player.getMoney() - playerMove.getCost());
 	    player.addCard(playerMove.getCard());
 	    newLogEntry(players[playerTurn].getName() + " has purchased the " + playerMove.getCard().getName() + " for "
-		    + playerMove.getCost() + " gold pieces.");
+		    + playerMove.getCost() + " mega-bucks.");
 	    gameState.movePointer();
 
 	} else if (playerMove.getMoveType().equals("Attack Card")) {
@@ -180,7 +182,7 @@ public class GameControl {
 	    player.setMoney(player.getMoney() - cost);
 	    player.addResearch(cost);
 
-	    newLogEntry(player.getName() + " converted " + cost + " gold pieces into research.");
+	    newLogEntry(player.getName() + " converted " + cost + " mega-bucks into research.");
 	    // Need to check for victory here
 	    if (player.getResearch() >= (player.getModuleLevel() + 1) * 100) {
 		newLogEntry(player.getName() + " has upgraded to a new level.");
@@ -207,9 +209,9 @@ public class GameControl {
 	    gameBoard.displayScores();
 
 	    // Check if the current player is able to make a move
-	    // must have more than 10 gold to buy a card
+	    // must have more than 10 mega-bucks to buy a card
 	    // must have a card adjacent to attack
-	    // must have enough money to convert gold to research
+	    // must have enough money to convert mega-bucks to research
 
 	    if ((players[playerTurn].getMoney() < 10) && (!attack.canAttack())
 		    && (players[playerTurn].getMoney() < players[playerTurn].getNewResearchCost())) {
@@ -254,9 +256,9 @@ public class GameControl {
 	gameBoard.displayScores();
 
 	// Check if the current player is able to make a move
-	// must have more than 10 gold to buy a card
+	// must have more than 10 mega-bucks to buy a card
 	// must have a card adjacent to attack
-	// must have enough money to convert gold to research
+	// must have enough money to convert mega-bucks to research
 
 	if ((players[playerTurn].getMoney() < 10) && (!attack.canAttack())
 		&& (players[playerTurn].getMoney() < players[playerTurn].getNewResearchCost())) {
@@ -312,7 +314,7 @@ public class GameControl {
     /*
      * rankPlayers(): Simple binary sort to rank all four players based on (1) their
      * research level, (2) accumulated research, and then (3) accumulated money. The
-     * method returns an array of indexes into the Player.player[] array, ordered
+     * method returns an array of indexes into the Player.players[] array, ordered
      * from highest-ranked (index[0]) to lowest (index[3]).
      * 
      * Obviously, if we decide to increase the number of players beyond 4, this
@@ -322,9 +324,8 @@ public class GameControl {
      * 
      * GameBoard.displayScores uses rankPlayers() to sort the players in the Current
      * Scores table. GameControl.updateRound also uses it to identify the highest
-     * research level any player has achieved (which, of course, must equal the
-     * level of the highest-ranked player), which in turn determines the background
-     * image.
+     * research level any player has achieved (which must equal the level of the
+     * highest-ranked player), which in turn determines the background image.
      */
     public int[] rankPlayers() {
 	int temp;
@@ -340,19 +341,19 @@ public class GameControl {
 	    index[2] = 3;
 	    index[3] = 2;
 	}
-	// Determine the top-ranked player ("best of the best")
+	// Identify the top-ranked player ("best of the best")
 	if (maxPlayers(index[0], index[2]) == index[2]) {
 	    temp = index[0];
 	    index[0] = index[2];
 	    index[2] = temp;
 	}
-	// Determine the bottom-ranked player ("worst of the worst")
+	// Identify the bottom-ranked player ("worst of the worst")
 	if (maxPlayers(index[1], index[3]) == index[3]) {
 	    temp = index[1];
 	    index[1] = index[3];
 	    index[3] = temp;
 	}
-	// Rank the "middle pair" of players and we're done
+	// Rank the middle pair of players ("best of the rest") and we're done
 	if (maxPlayers(index[1], index[2]) == index[2]) {
 	    temp = index[1];
 	    index[1] = index[2];
@@ -362,9 +363,11 @@ public class GameControl {
     }
 
     /*
-     * maxPlayers(): As noted above, this method ranks two players based on (1) their
-     * research level, (2) accumulated research, and then (3) accumulated money. The
-     * index corresponding to the higher-ranked of the two players is returned.
+     * maxPlayers(): As noted above, this method ranks two players based on (1)
+     * their research level, (2) accumulated research, and then (3) accumulated
+     * money. It takes, as parameters, the index for each player in the
+     * Player.players[] array and returns the index for the higher-ranked of the two
+     * players.
      */
     private int maxPlayers(int p1, int p2) {
 	// Does one player have a higher research level than the other?
@@ -374,7 +377,7 @@ public class GameControl {
 	} else if (diff < 0) {
 	    return p1;
 	}
-	
+
 	// No: Does one player have more accumulated research than the other?
 	diff = players[p2].getResearch() - players[p1].getResearch();
 	if (diff > 0) {
@@ -383,8 +386,8 @@ public class GameControl {
 	    return p1;
 	}
 
-	// No: Does one player have more money than the other?
-	// If there's still a tie, return the index for player 1
+	// No: Does one player have more accumulated mega-bucks than the other?
+	// If there's still a tie, return the index for the first of the two players
 	diff = players[p2].getMoney() - players[p1].getMoney();
 	if (diff > 0) {
 	    return p2;
@@ -541,10 +544,8 @@ public class GameControl {
 		player.setMoney(gameRules.getStartingMoney());
 		player.setHuman(false);
 	    }
-
 	    gameState.addPlayer(i, player);
 	}
-
 	players = gameState.getPlayers();
     }
 
@@ -629,9 +630,7 @@ public class GameControl {
 	    int randomCard = (int) (Math.random() * deck.length);
 	    deck[i] = deck[randomCard];
 	    deck[randomCard] = tempCard;
-
 	}
-
 	return deck;
     }
 
@@ -646,14 +645,14 @@ public class GameControl {
 	// Output current scores
 	System.out.println("Scores after round " + gameState.getGameRound() + " are as follows:");
 	for (int i = 0; i < gameRules.getNumberOfPlayers(); i++) {
-	    System.out.println(players[i].getName() + " gold: " + players[i].getMoney() + " research: "
+	    System.out.println(players[i].getName() + " mega-bucks: " + players[i].getMoney() + " research: "
 		    + players[i].getResearch());
 	}
     }
 
     void giveEarnings() {
 	Player player = players[playerTurn];
-	// Add gold earned from previous period based
+	// Add mega-bucks earned from previous period based
 	// on cards owned.
 	playerCards = player.getCards();
 	int earnings = 0;
@@ -682,7 +681,7 @@ public class GameControl {
 		earnings = 0;
 	}
 
-	newLogEntry(player.getName() + " earned " + earnings + " gold pieces from assets last round.");
+	newLogEntry(player.getName() + " earned " + earnings + " mega-bucks from their portfolio last round.");
     }
 
     boolean canBuy() {

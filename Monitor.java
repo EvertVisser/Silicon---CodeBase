@@ -7,18 +7,20 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-//GRP-COSC2635 2D
-//
-//SILICON - A JavaFX GAME BY:
-//Clark Lavery (mentor)
-//Evert Visser (s3727884)
-//Duncan Baxter (s3737140)
-//Kira Macarthur (s3742864)
-//Dao Kun Nie (s3691571)
-//Michael Power (s3162668)
-//John Zealand-Doyle (s3319550)
-//
-// A class that holds variables related to the screen
+/*
+ * GRP-COSC2635 2D
+ * (a.k.a. ERROR 404: TEAM NAME NOT FOUND)
+ * SiLiCON - A JavaFX game by:
+ * - Clark Lavery (mentor)
+ * - Evert Visser (s3727884)
+ * - Duncan Baxter (s3737140)
+ * - Kira Macarthur (s3742864)
+ * - Dao Kun Nie (s3691571)
+ * - John Zealand-Doyle (s3319550)
+ * - ex-team member Michael Power (s3162668)
+ * 
+ * A class that holds variables and methods related to the physical screen
+ */
 
 public class Monitor {
     static private Stage stage; // Storage for Monitor Class's copy of Stage (used by Fullscreen methods)

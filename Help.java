@@ -1,14 +1,21 @@
 
 /*
+ * GRP-COSC2635 2D
+ * (a.k.a. ERROR 404: TEAM NAME NOT FOUND)
  * SiLiCON - A JavaFX game by:
  * - Clark Lavery (mentor)
  * - Evert Visser (s3727884)
  * - Duncan Baxter (s3737140)
  * - Kira Macarthur (s3742864)
  * - Dao Kun Nie (s3691571)
- * - Michael Power (s3162668)
  * - John Zealand-Doyle (s3319550)
+ * - ex-team member Michael Power (s3162668)
  * 
+ * This Class creates the "Help" screen.  Its sole method is public and static, 
+ * not because this constitutes good coding practice (it would usually be taken 
+ * as a strong indication that the code belongs in another class), but to make 
+ * it easier for team members to work with the Class.
+ *  
  * Duncan can answer queries in relation to this Class.
  */
 
@@ -32,11 +39,11 @@ public class Help {
 	    String line;
 	    while (scanner.hasNextLine()) {
 		line = scanner.nextLine();
-		help.appendText(line+"\n");
+		help.appendText(line + "\n");
 	    }
 	    scanner.close();
 	} catch (Exception ex) {
-	    System.out.println("Help Class (lines 31-38): Unable to load 'silicon_help.txt' - file error.");
+	    System.out.println("Help Class (lines 36-41): Unable to load 'silicon_help.txt' - file error.");
 	}
 	help.home();
 	return help;
