@@ -6,7 +6,7 @@ Silicon game files:
 + Tone.java, Envelope.java and Twain.java (threaded sound player support); and
 + resources.zip (4 sub-folders with resources: /data, /images and /sounds plus /images/cards).
 
-These files are the result of the extensive recent pruning and harmonisation of the team's codebase.  You can now play through an entire game on the "generic + research level 0" background, and I am working, with my coding colleagues of course (i.e. Dao), to improve the user experience ...
+These files are the result of the extensive recent pruning and harmonisation of the team's codebase.  You can now play through an entire game, and I encourage you to do so as many times as you can: we need the test input!
 
 I've uploaded a Windows executable that seems to work on my system ... these things are very "touchy", though, so it may not work on yours.  Nonetheless, I'd be very interested to see whether it works "out of the box" for anyone else!  There is also an executable ".jar" file for non-Windows users.
 
